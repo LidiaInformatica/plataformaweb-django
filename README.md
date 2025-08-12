@@ -138,6 +138,7 @@ python manage.py runserver
 - Admin: http://127.0.0.1:8000/admin/
 
 ### Usuarios de Prueba
+- **Administrador**: Lidia | Contraseña: 'admin123'
 - **Apoderado**: RUT `12345678k` | Contraseña: `password123`
 - **Directiva**: RUT `98765432j` | Contraseña: `password123`
 
@@ -228,14 +229,3 @@ python manage.py runserver
 4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
 5. Crear Pull Request
 
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## Contacto
-
-Para consultas o soporte, contactar a través de los issues del repositorio.
-
----
-
-**Desarrollado con ❤️ para la gestión educativa moderna**
