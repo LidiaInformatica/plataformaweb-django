@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} - Colegio Adventista Talcahuano Centro{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">{{ titulo }}</h1>
+                    <p class="text-muted">Complete la información del estudiante y su apoderado</p>
+                </div>
+                <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" class="row g-4">
+                {% csrf_token %}
+                
+                <!-- Información del Estudiante -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-user-graduate text-primary"></i>
+                                Información del Estudiante
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="{{ estudiante_form.rut.id_for_label }}" class="form-label">RUT *</label>
+                                    {{ estudiante_form.rut }}
+                                    {% if estudiante_form.rut.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.rut.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ estudiante_form.curso.id_for_label }}" class="form-label">Curso *</label>
+                                    {{ estudiante_form.curso }}
+                                    {% if estudiante_form.curso.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.curso.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ estudiante_form.nombre.id_for_label }}" class="form-label">Nombre *</label>
+                                    {{ estudiante_form.nombre }}
+                                    {% if estudiante_form.nombre.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.nombre.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ estudiante_form.apellido_paterno.id_for_label }}" class="form-label">Apellido Paterno *</label>
+                                    {{ estudiante_form.apellido_paterno }}
+                                    {% if estudiante_form.apellido_paterno.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.apellido_paterno.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ estudiante_form.apellido_materno.id_for_label }}" class="form-label">Apellido Materno</label>
+                                    {{ estudiante_form.apellido_materno }}
+                                    {% if estudiante_form.apellido_materno.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.apellido_materno.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ estudiante_form.fecha_nacimiento.id_for_label }}" class="form-label">Fecha de Nacimiento *</label>
+                                    {{ estudiante_form.fecha_nacimiento }}
+                                    {% if estudiante_form.fecha_nacimiento.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.fecha_nacimiento.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ estudiante_form.vinculo_apoderado.id_for_label }}" class="form-label">Vínculo con Apoderado *</label>
+                                    {{ estudiante_form.vinculo_apoderado }}
+                                    {% if estudiante_form.vinculo_apoderado.errors %}
+                                        <div class="text-danger small">{{ estudiante_form.vinculo_apoderado.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del Apoderado -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-user-tie text-info"></i>
+                                Información del Apoderado
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Alerta informativa -->
+                            <div class="alert alert-info mb-3">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Nota:</strong> Si el RUT del apoderado ya está registrado, se vinculará automáticamente con el estudiante existente. 
+                                Esto permite que un apoderado tenga múltiples hijos en el colegio.
+                            </div>
+                            
+                            <!-- Div para mostrar información del apoderado encontrado -->
+                            <div id="apoderado-info"></div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="{{ apoderado_form.rut.id_for_label }}" class="form-label">RUT *</label>
+                                    {{ apoderado_form.rut }}
+                                    {% if apoderado_form.rut.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.rut.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- Campo vacío para balance visual -->
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ apoderado_form.nombre.id_for_label }}" class="form-label">Nombre *</label>
+                                    {{ apoderado_form.nombre }}
+                                    {% if apoderado_form.nombre.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.nombre.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ apoderado_form.apellido_paterno.id_for_label }}" class="form-label">Apellido Paterno *</label>
+                                    {{ apoderado_form.apellido_paterno }}
+                                    {% if apoderado_form.apellido_paterno.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.apellido_paterno.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ apoderado_form.apellido_materno.id_for_label }}" class="form-label">Apellido Materno</label>
+                                    {{ apoderado_form.apellido_materno }}
+                                    {% if apoderado_form.apellido_materno.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.apellido_materno.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ apoderado_form.telefono.id_for_label }}" class="form-label">Teléfono *</label>
+                                    {{ apoderado_form.telefono }}
+                                    {% if apoderado_form.telefono.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.telefono.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="{{ apoderado_form.email.id_for_label }}" class="form-label">Email *</label>
+                                    {{ apoderado_form.email }}
+                                    {% if apoderado_form.email.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.email.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-12">
+                                    <label for="{{ apoderado_form.direccion.id_for_label }}" class="form-label">Dirección</label>
+                                    {{ apoderado_form.direccion }}
+                                    {% if apoderado_form.direccion.errors %}
+                                        <div class="text-danger small">{{ apoderado_form.direccion.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="col-12">
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 
+                            {% if estudiante %}Actualizar{% else %}Crear{% endif %} Estudiante
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Script para formatear RUT automáticamente
+function formatRut(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 1) {
+        let rut = value.slice(0, -1);
+        let dv = value.slice(-1);
+        rut = rut.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = rut + '-' + dv;
+    }
+}
+
+// Función para buscar apoderado existente
+function buscarApoderado(rut) {
+    if (rut.length < 8) return; // RUT muy corto
+    
+    fetch(`{% url 'estudiantes:buscar_apoderado_ajax' %}?rut=${encodeURIComponent(rut)}`)
+        .then(response => response.json())
+        .then(data => {
+            const alertDiv = document.getElementById('apoderado-info');
+            
+            if (data.encontrado) {
+                // Autocompletar campos del apoderado (con prefijo 'apoderado-')
+                document.getElementById('id_apoderado-nombre').value = data.apoderado.nombre;
+                document.getElementById('id_apoderado-apellido_paterno').value = data.apoderado.apellido_paterno;
+                document.getElementById('id_apoderado-apellido_materno').value = data.apoderado.apellido_materno;
+                document.getElementById('id_apoderado-telefono').value = data.apoderado.telefono;
+                document.getElementById('id_apoderado-email').value = data.apoderado.email;
+                document.getElementById('id_apoderado-direccion').value = data.apoderado.direccion;
+                
+                // Mostrar información de hijos existentes
+                let hijosInfo = '';
+                if (data.total_hijos > 0) {
+                    hijosInfo = `<br><strong>Hijos ya registrados:</strong><ul>`;
+                    data.hijos.forEach(hijo => {
+                        hijosInfo += `<li>${hijo.nombre} - ${hijo.curso}</li>`;
+                    });
+                    hijosInfo += `</ul>`;
+                }
+                
+                alertDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Apoderado encontrado:</strong> ${data.apoderado.nombre} ${data.apoderado.apellido_paterno}
+                        ${hijosInfo}
+                        <small class="d-block mt-2">Los datos se han completado automáticamente. Se vinculará este estudiante con el apoderado existente.</small>
+                    </div>
+                `;
+                
+                // Deshabilitar campos del apoderado (excepto RUT para permitir cambios)
+                const campos = ['nombre', 'apellido_paterno', 'apellido_materno', 'telefono', 'email', 'direccion'];
+                campos.forEach(campo => {
+                    const elemento = document.getElementById('id_apoderado-' + campo);
+                    if (elemento) elemento.readOnly = true;
+                });
+                
+            } else {
+                alertDiv.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-plus-circle"></i>
+                        <strong>Nuevo apoderado:</strong> No se encontró un apoderado con este RUT. Se creará un nuevo registro.
+                    </div>
+                `;
+                
+                // Habilitar todos los campos
+                const campos = ['nombre', 'apellido_paterno', 'apellido_materno', 'telefono', 'email', 'direccion'];
+                campos.forEach(campo => {
+                    const elemento = document.getElementById('id_apoderado-' + campo);
+                    if (elemento) {
+                        elemento.readOnly = false;
+                        elemento.value = ''; // Limpiar campo
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error buscando apoderado:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Formatear RUT del estudiante (con prefijo 'estudiante-')
+    const rutEstudiante = document.getElementById('id_estudiante-rut');
+    if (rutEstudiante) {
+        rutEstudiante.addEventListener('input', function() {
+            formatRut(this);
+        });
+    }
+    
+    // Formatear RUT del apoderado y buscar existente (con prefijo 'apoderado-')
+    const rutApoderado = document.getElementById('id_apoderado-rut');
+    if (rutApoderado) {
+        rutApoderado.addEventListener('input', function() {
+            formatRut(this);
+        });
+        
+        // Buscar apoderado cuando se termine de escribir el RUT
+        rutApoderado.addEventListener('blur', function() {
+            const rut = this.value.replace(/\D/g, ''); // Solo números
+            if (rut.length >= 8) {
+                buscarApoderado(this.value);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

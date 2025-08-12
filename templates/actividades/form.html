@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} - Plataforma Web Escolar{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-plus me-2"></i>{{ titulo }}
+                </h5>
+                <a href="{% url 'actividades:lista' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i>Volver
+                </a>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="{{ form.nombre.id_for_label }}" class="form-label">
+                                {{ form.nombre.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.nombre }}
+                            {% if form.nombre.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.nombre.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                Tipo de Actividad
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="tipos-actividad">
+                                {% for tipo in tipos_actividad %}
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="tipo" value="{{ tipo.id }}" 
+                                               id="tipo_{{ tipo.id }}"
+                                               {% if form.tipo.value == tipo.id %}checked{% endif %}>
+                                        <label class="form-check-label" for="tipo_{{ tipo.id }}">
+                                            <strong>{{ tipo.nombre }}</strong>
+                                            <br><small class="text-muted">{{ tipo.descripcion }}</small>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if form.tipo.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.tipo.errors.0 }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Seleccione el tipo que mejor describa la naturaleza del cobro.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.estado.id_for_label }}" class="form-label">
+                                {{ form.estado.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.estado }}
+                            {% if form.estado.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.estado.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.fecha_inicio.id_for_label }}" class="form-label">
+                                {{ form.fecha_inicio.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.fecha_inicio }}
+                            {% if form.fecha_inicio.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.fecha_inicio.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.fecha_fin.id_for_label }}" class="form-label">
+                                {{ form.fecha_fin.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.fecha_fin }}
+                            {% if form.fecha_fin.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.fecha_fin.errors.0 }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                Fecha límite para que los apoderados realicen el pago.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.monto_por_estudiante.id_for_label }}" class="form-label">
+                                {{ form.monto_por_estudiante.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                {{ form.monto_por_estudiante }}
+                            </div>
+                            {% if form.monto_por_estudiante.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.monto_por_estudiante.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            {{ form.cursos_asignados.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto;">
+                            {% for checkbox in form.cursos_asignados %}
+                                <div class="form-check">
+                                    {{ checkbox.tag }}
+                                    <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                        {{ checkbox.choice_label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if form.cursos_asignados.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.cursos_asignados.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            Seleccione los cursos que participarán en esta actividad.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.descripcion.id_for_label }}" class="form-label">
+                            {{ form.descripcion.label }}
+                        </label>
+                        {{ form.descripcion }}
+                        {% if form.descripcion.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.descripcion.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors.0 }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'actividades:lista' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>{{ boton_texto }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Información Importante
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li><strong>Fecha de Inicio:</strong> Fecha en que la actividad comienza o se realiza.</li>
+                    <li><strong>Fecha de Vencimiento:</strong> Fecha límite para que los apoderados paguen la actividad.</li>
+                    <li><strong>Monto por Estudiante:</strong> Valor que debe pagar cada estudiante para participar.</li>
+                    <li><strong>Estado:</strong> Planificada (no visible para apoderados), Activa (visible y pagable), Finalizada o Cancelada.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validación de fechas
+    const fechaInicio = document.getElementById('{{ form.fecha_inicio.id_for_label }}');
+    const fechaFin = document.getElementById('{{ form.fecha_fin.id_for_label }}');
+    
+    function validarFechas() {
+        if (fechaInicio.value && fechaFin.value) {
+            if (new Date(fechaFin.value) < new Date(fechaInicio.value)) {
+                fechaFin.setCustomValidity('La fecha de vencimiento debe ser posterior a la fecha de inicio');
+            } else {
+                fechaFin.setCustomValidity('');
+            }
+        }
+    }
+    
+    fechaInicio.addEventListener('change', validarFechas);
+    fechaFin.addEventListener('change', validarFechas);
+});
+</script>
+{% endblock %}

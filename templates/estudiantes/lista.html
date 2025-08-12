@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Estudiantes - Colegio Adventista Talcahuano Centro{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="h3 mb-0">Gestión de Estudiantes</h1>
+        <p class="text-muted">Lista de estudiantes registrados en el sistema</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'estudiantes:crear' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Nuevo Estudiante
+        </a>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-users me-2"></i>Lista de Estudiantes
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if estudiantes %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>RUT</th>
+                            <th>Nombre Completo</th>
+                            <th>Curso</th>
+                            <th>Apoderado</th>
+                            <th>Vínculo</th>
+                            <th>Teléfono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for estudiante in estudiantes %}
+                        <tr>
+                            <td>{{ estudiante.rut }}</td>
+                            <td>{{ estudiante.nombre }} {{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ estudiante.curso.nombre }}</span>
+                            </td>
+                            <td>
+                                {{ estudiante.apoderado.nombre }} {{ estudiante.apoderado.apellido_paterno }}
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ estudiante.get_vinculo_apoderado_display }}</span>
+                            </td>
+                            <td>{{ estudiante.apoderado.telefono|default:"-" }}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'estudiantes:ver' estudiante.pk %}" class="btn btn-outline-primary" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'cuotas:lista_pagos' %}?estudiante={{ estudiante.pk }}" class="btn btn-outline-success" title="Ver pagos">
+                                        <i class="fas fa-money-bill"></i>
+                                    </a>
+                                    <a href="{% url 'estudiantes:editar' estudiante.pk %}" class="btn btn-outline-warning" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No hay estudiantes registrados</h5>
+                <p class="text-muted">Comience agregando el primer estudiante al sistema</p>
+                <a href="{% url 'estudiantes:crear' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Agregar Estudiante
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Estadísticas -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Total Estudiantes</h5>
+                <h3 class="text-primary">{{ total_estudiantes }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Cursos Activos</h5>
+                <h3 class="text-info">{{ cursos_activos }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Apoderados</h5>
+                <h3 class="text-success">{{ apoderados_count }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Estudiantes Activos</h5>
+                <h3 class="text-warning">{{ estudiantes_activos }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

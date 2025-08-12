@@ -1,0 +1,38 @@
+=========================================
+  NUEVA ACTIVIDAD CREADA
+  {{ nombre_institucion }}
+=========================================
+
+¡Se ha creado una nueva actividad en el sistema!
+
+DETALLES DE LA ACTIVIDAD:
+-------------------------
+Nombre: {{ actividad.nombre }}
+Tipo: {{ actividad.tipo.nombre }}
+Descripción: {{ actividad.descripcion }}
+Fecha de inicio: {{ actividad.fecha_inicio|date:"d/m/Y" }}
+Fecha de vencimiento: {{ actividad.fecha_fin|date:"d/m/Y" }}
+Monto por estudiante: ${{ actividad.monto_por_estudiante|floatformat:0 }}
+Estado: {{ actividad.get_estado_display }}
+
+CURSOS PARTICIPANTES:
+--------------------
+{% for curso in actividad.cursos_asignados.all %}• {{ curso.nombre }}
+{% endfor %}
+
+ESTADÍSTICAS ESPERADAS:
+----------------------
+Estudiantes participantes: {{ actividad.total_estudiantes }}
+Recaudación esperada: ${{ actividad.recaudacion_esperada|floatformat:0 }}
+
+ACCESO AL SISTEMA:
+-----------------
+Para ver más detalles: {{ url_actividad }}
+
+=========================================
+{{ nombre_institucion }}
+Sistema de Gestión Escolar
+Fecha de envío: {{ fecha_actual }}
+
+Este es un mensaje automático del sistema.
+=========================================

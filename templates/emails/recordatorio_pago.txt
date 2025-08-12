@@ -1,0 +1,15 @@
+¡Hola!
+
+Este es un recordatorio de pago para la actividad {{ actividad.nombre }}.
+
+Detalles del pago:
+- Estudiante: {{ estudiante.nombre }} {{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}
+- Actividad: {{ actividad.nombre }}
+- Monto pendiente: ${{ monto_pendiente }}
+- Fecha de vencimiento: {{ fecha_vencimiento }}
+
+Para realizar el pago, puedes visitar: {{ url_pago }}
+
+Saludos cordiales,
+Colegio Adventista Talcahuano Centro
+Sistema de Gestión Escolar

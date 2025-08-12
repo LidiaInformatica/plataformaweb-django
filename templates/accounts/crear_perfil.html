@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Perfil - Plataforma Web Escolar{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-cog me-2"></i>Completar Perfil
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>¡Bienvenido!</strong> Para completar su registro, necesitamos algunos datos adicionales.
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Información Personal</h6>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" value="{{ user.get_full_name }}" readonly>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">RUT</label>
+                                <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" value="{{ user.email }}" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Información del Perfil</h6>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.tipo_perfil.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user-tag me-2"></i>{{ form.tipo_perfil.label }} *
+                                </label>
+                                {{ form.tipo_perfil }}
+                                {% if form.tipo_perfil.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.tipo_perfil.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <strong>Administrador:</strong> Control total del sistema<br>
+                                    <strong>Directiva:</strong> Gestión operativa completa<br>
+                                    <strong>Apoderado:</strong> Solo lectura de información de sus hijos
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3" id="cargo-directiva-field" style="display: none;">
+                                <label for="{{ form.cargo_directiva.id_for_label }}" class="form-label">
+                                    <i class="fas fa-crown me-2"></i>{{ form.cargo_directiva.label }} *
+                                </label>
+                                {{ form.cargo_directiva }}
+                                {% if form.cargo_directiva.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.cargo_directiva.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">
+                                    Seleccione su cargo específico en la directiva
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.telefono.id_for_label }}" class="form-label">
+                                    <i class="fas fa-phone me-2"></i>{{ form.telefono.label }}
+                                </label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.telefono.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sign-out-alt me-1"></i>Salir
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Completar Perfil
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleCargoDirectiva() {
+    const tipoPerfil = document.getElementById('id_tipo_perfil').value;
+    const cargoField = document.getElementById('cargo-directiva-field');
+    
+    if (tipoPerfil === 'directiva') {
+        cargoField.style.display = 'block';
+        document.getElementById('id_cargo_directiva').required = true;
+    } else {
+        cargoField.style.display = 'none';
+        document.getElementById('id_cargo_directiva').required = false;
+        document.getElementById('id_cargo_directiva').value = '';
+    }
+}
+
+// Ejecutar al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCargoDirectiva();
+});
+</script>
+{% endblock %}

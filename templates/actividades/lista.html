@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Actividades - Plataforma Web Escolar{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="h3 mb-0">Gestión de Actividades</h1>
+        <p class="text-muted">Lista de actividades escolares registradas</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'actividades:exportar' %}" class="btn btn-success me-2">
+            <i class="fas fa-download me-1"></i>Exportar
+        </a>
+        <a href="{% url 'actividades:crear' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Nueva Actividad
+        </a>
+    </div>
+</div>
+
+<!-- Filtros -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h6 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Filtros de Búsqueda
+        </h6>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Tipo de Actividad</label>
+                <select name="tipo" class="form-select">
+                    <option value="">Todos los tipos</option>
+                    {% for tipo in tipos_actividad %}
+                        <option value="{{ tipo }}" {% if filtros.tipo == tipo %}selected{% endif %}>
+                            {{ tipo }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Curso</label>
+                <select name="curso" class="form-select">
+                    <option value="">Todos los cursos</option>
+                    {% for curso in cursos %}
+                        <option value="{{ curso }}" {% if filtros.curso == curso %}selected{% endif %}>
+                            {{ curso }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Fecha Inicio</label>
+                <input type="date" name="fecha_inicio" class="form-control" value="{{ filtros.fecha_inicio }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Fecha Fin</label>
+                <input type="date" name="fecha_fin" class="form-control" value="{{ filtros.fecha_fin }}">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search me-1"></i>Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Lista de Actividades -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-calendar-alt me-2"></i>Actividades Registradas ({{ actividades|length }})
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Monto</th>
+                        <th>Estudiantes</th>
+                        <th>Recaudación Esperada</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for actividad in actividades %}
+                    <tr>
+                        <td>
+                            <strong>{{ actividad.nombre }}</strong>
+                            <br>
+                            <small class="text-muted">
+                                {% for curso in actividad.cursos_asignados.all %}
+                                    {{ curso.nombre }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </small>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">{{ actividad.tipo.nombre }}</span>
+                        </td>
+                        <td>{{ actividad.fecha_inicio|date:"d/m/Y" }}</td>
+                        <td>{{ actividad.fecha_fin|date:"d/m/Y" }}</td>
+                        <td class="text-success fw-bold">${{ actividad.monto_por_estudiante|floatformat:0 }}</td>
+                        <td class="text-center">{{ actividad.total_estudiantes }}</td>
+                        <td class="text-primary fw-bold">${{ actividad.recaudacion_esperada|floatformat:0 }}</td>
+                        <td>
+                            {% if actividad.estado == 'activa' %}
+                                <span class="badge bg-success">{{ actividad.get_estado_display }}</span>
+                            {% elif actividad.estado == 'planificada' %}
+                                <span class="badge bg-warning">{{ actividad.get_estado_display }}</span>
+                            {% elif actividad.estado == 'finalizada' %}
+                                <span class="badge bg-info">{{ actividad.get_estado_display }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ actividad.get_estado_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'actividades:ver' actividad.pk %}" class="btn btn-outline-primary" title="Ver detalles">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'cuotas:lista_pagos' %}?actividad={{ actividad.pk }}" class="btn btn-outline-success" title="Ver pagos">
+                                    <i class="fas fa-money-bill"></i>
+                                </a>
+                                <a href="{% url 'actividades:editar' actividad.pk %}" class="btn btn-outline-warning" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'actividades:eliminar' actividad.pk %}" class="btn btn-outline-danger" title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No hay actividades registradas</p>
+                            <a href="{% url 'actividades:crear' %}" class="btn btn-primary">
+                                <i class="fas fa-plus me-1"></i>Crear Primera Actividad
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Resumen -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Total Actividades</h6>
+                <h4 class="text-primary">{{ actividades|length }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Actividades Activas</h6>
+                <h4 class="text-success">3</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Planificadas</h6>
+                <h4 class="text-warning">2</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Finalizadas</h6>
+                <h4 class="text-info">2</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

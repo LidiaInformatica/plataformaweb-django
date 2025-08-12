@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Plataforma Web Escolar{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="h3 mb-0">Dashboard - {{ mes_actual }}</h1>
+        <p class="text-muted">Resumen mensual del sistema</p>
+    </div>
+</div>
+
+<!-- Tarjetas de Resumen -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Recaudación Total</h6>
+                        <h3 class="mb-0">${{ recaudacion_total|floatformat:0 }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-dollar-sign fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Cuotas Pendientes</h6>
+                        <h3 class="mb-0">{{ cuotas_pendientes }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Actividades Activas</h6>
+                        <h3 class="mb-0">{{ actividades_activas }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-calendar-check fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Total Estudiantes</h6>
+                        <h3 class="mb-0">{{ total_estudiantes }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Nueva fila para notificaciones -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-secondary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Notificaciones</h6>
+                        <h3 class="mb-0" id="count-notificaciones">{{ notificaciones_no_leidas }}</h3>
+                        <small>Sin leer</small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-bell fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-dark">
+                <a href="{% url 'notificaciones:lista' %}" class="text-white text-decoration-none">
+                    <i class="fas fa-eye"></i> Ver todas las notificaciones
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-tachometer-alt"></i> Accesos Rápidos del Sistema
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <a href="{% url 'notificaciones:test' %}" class="btn btn-outline-info btn-sm w-100">
+                            <i class="fas fa-vial"></i> Probar Notificaciones
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="fas fa-users"></i> Gestionar Estudiantes
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <a href="{% url 'actividades:lista' %}" class="btn btn-outline-success btn-sm w-100">
+                            <i class="fas fa-calendar"></i> Gestionar Actividades
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mensajes y Alertas (RF-08) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-bell me-2"></i>Mensajes y Alertas
+                </h5>
+                <a href="{% url 'core:bandeja_mensajes' %}" class="btn btn-sm btn-outline-primary">
+                    Ver todos los mensajes
+                </a>
+            </div>
+            <div class="card-body">
+                {% for mensaje in mensajes_alertas %}
+                <div class="alert alert-{{ mensaje.color }} alert-dismissible fade show" role="alert">
+                    <i class="{{ mensaje.icono }} me-2"></i>
+                    <strong>{{ mensaje.titulo }}:</strong> {{ mensaje.mensaje }}
+                    <small class="d-block mt-1 text-muted">{{ mensaje.fecha|timesince }} atrás</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notificaciones Automáticas (RF-06) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-robot me-2"></i>Notificaciones Automáticas Recientes
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Mensaje</th>
+                                <th>Estudiante</th>
+                                <th>Fecha Envío</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for notif in notificaciones_automaticas|slice:":5" %}
+                            <tr>
+                                <td>
+                                    {% if notif.tipo == 'recordatorio' %}
+                                        <span class="badge bg-warning">Recordatorio</span>
+                                    {% elif notif.tipo == 'nueva_cuota' %}
+                                        <span class="badge bg-info">Nueva Cuota</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ notif.mensaje }}</td>
+                                <td>{{ notif.estudiante }}</td>
+                                <td>{{ notif.fecha_envio|date:"d/m/Y" }}</td>
+                                <td>
+                                    <span class="badge bg-success">Enviado</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Últimos Pagos -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>Últimos Pagos Registrados
+                </h5>
+                <a href="{% url 'cuotas:lista_pagos' %}" class="btn btn-sm btn-outline-primary">
+                    Ver todos los pagos
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Actividad</th>
+                                <th>Monto</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pago in ultimos_pagos %}
+                            <tr>
+                                <td>{{ pago.estudiante }}</td>
+                                <td>{{ pago.actividad }}</td>
+                                <td class="text-success fw-bold">${{ pago.monto|floatformat:0 }}</td>
+                                <td>{{ pago.fecha|date:"d/m/Y" }}</td>
+                                <td>
+                                    {% if pago.estado == 'pagado' %}
+                                        <span class="badge bg-success">Pagado</span>
+                                    {% elif pago.estado == 'pendiente' %}
+                                        <span class="badge bg-warning">Pendiente</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ pago.estado }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Accesos Rápidos -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Accesos Rápidos
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'cuotas:registrar_pago' %}" class="btn btn-outline-success w-100">
+                            <i class="fas fa-plus me-2"></i>Registrar Pago
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-users me-2"></i>Ver Estudiantes
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'actividades:lista' %}" class="btn btn-outline-info w-100">
+                            <i class="fas fa-calendar me-2"></i>Ver Actividades
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'actividades:exportar' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-download me-2"></i>Exportar Datos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

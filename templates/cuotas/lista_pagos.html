@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}Cuotas y Pagos - Plataforma Web Escolar{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="h3 mb-0">Gestión de Cuotas y Pagos</h1>
+        <p class="text-muted">Control de pagos por estudiante</p>
+    </div>
+    <div class="col-auto">
+        <div class="btn-group">
+            <a href="{% url 'cuotas:exportar_pagos' %}?formato=excel" class="btn btn-success">
+                <i class="fas fa-file-excel me-1"></i>Excel
+            </a>
+            <a href="{% url 'cuotas:exportar_pagos' %}?formato=pdf" class="btn btn-danger">
+                <i class="fas fa-file-pdf me-1"></i>PDF
+            </a>
+            <a href="{% url 'cuotas:registrar_pago' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i>Registrar Pago
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros Avanzados (RF-04) -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h6 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Filtros Avanzados de Búsqueda
+        </h6>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Buscar Estudiante</label>
+                <input type="text" name="estudiante" class="form-control" 
+                       placeholder="Nombre del estudiante" value="{{ filtros.estudiante }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">RUT</label>
+                <input type="text" name="rut" class="form-control" 
+                       placeholder="12.345.678-9" value="{{ filtros.rut }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Actividad</label>
+                <input type="text" name="actividad" class="form-control" 
+                       placeholder="Nombre de la actividad" value="{{ filtros.actividad }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Curso</label>
+                <select name="curso" class="form-select">
+                    <option value="">Todos los cursos</option>
+                    {% for curso in cursos %}
+                        <option value="{{ curso.id }}" {% if filtros.curso == curso.id|stringformat:"s" %}selected{% endif %}>
+                            {{ curso.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Estado</label>
+                <select name="estado" class="form-select">
+                    <option value="">Todos los estados</option>
+                    <option value="pagado" {% if filtros.estado == 'pagado' %}selected{% endif %}>Pagado</option>
+                    <option value="pendiente" {% if filtros.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                    <option value="parcial" {% if filtros.estado == 'parcial' %}selected{% endif %}>Parcial</option>
+                    <option value="vencido" {% if filtros.estado == 'vencido' %}selected{% endif %}>Vencido</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <div class="btn-group w-100">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-1"></i>Filtrar
+                    </button>
+                    <a href="{% url 'cuotas:lista_pagos' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Lista de Pagos -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-money-bill-wave me-2"></i>Pagos por Estudiante ({{ pagos|length }})
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        <th>RUT</th>
+                        <th>Curso</th>
+                        <th>Actividad</th>
+                        <th>Monto Total</th>
+                        <th>Pagado</th>
+                        <th>Saldo Pendiente</th>
+                        <th>Estado</th>
+                        <th>Último Pago</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pago in pagos %}
+                    <tr>
+                        <td>
+                            <strong>{{ pago.estudiante }}</strong>
+                        </td>
+                        <td>{{ pago.rut_estudiante }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ pago.curso }}</span>
+                        </td>
+                        <td>{{ pago.actividad }}</td>
+                        <td class="fw-bold">${{ pago.monto_total|floatformat:0 }}</td>
+                        <td class="text-success fw-bold">${{ pago.monto_pagado|floatformat:0 }}</td>
+                        <td class="{% if pago.saldo_pendiente > 0 %}text-danger{% else %}text-success{% endif %} fw-bold">
+                            ${{ pago.saldo_pendiente|floatformat:0 }}
+                        </td>
+                        <td>
+                            {% if pago.estado == 'Pagado' %}
+                                <span class="badge bg-success">{{ pago.estado }}</span>
+                            {% elif pago.estado == 'Pendiente' %}
+                                <span class="badge bg-warning">{{ pago.estado }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ pago.estado }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if pago.ultimo_pago %}
+                                {{ pago.ultimo_pago }}
+                                {% if pago.metodo_pago %}
+                                    <br><small class="text-muted">{{ pago.metodo_pago }}</small>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">Sin pagos</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" title="Ver historial">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                                <a href="{% url 'cuotas:historial_actividad' 1 %}" class="btn btn-outline-info" title="Historial actividad">
+                                    <i class="fas fa-list"></i>
+                                </a>
+                                {% if pago.saldo_pendiente > 0 %}
+                                <a href="{% url 'cuotas:registrar_pago' %}" class="btn btn-outline-success" title="Registrar pago">
+                                    <i class="fas fa-plus"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Resumen -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Total Cuotas</h6>
+                <h4 class="text-primary">{{ pagos|length }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Pagadas</h6>
+                <h4 class="text-success">3</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Pendientes</h6>
+                <h4 class="text-warning">3</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h6 class="card-title">Monto Pendiente</h6>
+                <h4 class="text-danger">$59.000</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

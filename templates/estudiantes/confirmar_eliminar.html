@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Eliminar Estudiante - {{ estudiante.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Confirmar Eliminación
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-user-times fa-4x text-danger mb-3"></i>
+                        <h4>¿Está seguro que desea eliminar este estudiante?</h4>
+                        <p class="text-muted">Esta acción no se puede deshacer.</p>
+                    </div>
+
+                    <div class="border rounded p-3 mb-4 bg-light">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <strong>Nombre:</strong> {{ estudiante.nombre }} {{ estudiante.apellido_paterno }} {{ estudiante.apellido_materno }}
+                            </div>
+                            <div class="col-6 mb-2">
+                                <strong>RUT:</strong> {{ estudiante.rut }}
+                            </div>
+                            <div class="col-6 mb-2">
+                                <strong>Curso:</strong> {{ estudiante.curso.nombre }}
+                            </div>
+                            <div class="col-12">
+                                <strong>Apoderado:</strong> {{ estudiante.apoderado.nombre }} {{ estudiante.apoderado.apellido_paterno }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Advertencia:</strong> Al eliminar este estudiante también se eliminarán:
+                        <ul class="mb-0 mt-2">
+                            <li>Todas las cuotas pendientes</li>
+                            <li>Historial de pagos</li>
+                            <li>Relaciones con apoderados</li>
+                        </ul>
+                    </div>
+
+                    <form method="post" class="d-flex justify-content-end gap-2">
+                        {% csrf_token %}
+                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Confirmar Eliminación
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

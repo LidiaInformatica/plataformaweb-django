@@ -1,0 +1,225 @@
+@startuml Sistema_Gestion_Escolar_Actualizado
+
+!define ENTITY class
+!define PRIMARY_KEY <<PK>>
+!define FOREIGN_KEY <<FK>>
+
+' ===== MÓDULO DE USUARIOS Y PERFILES =====
+ENTITY User {
+  + id: BigInteger PRIMARY_KEY
+  --
+  username: String
+  email: String  
+  first_name: String
+  last_name: String
+  password: String
+  is_active: Boolean
+  date_joined: DateTime
+}
+
+ENTITY PerfilUsuario {
+  + id: BigInteger PRIMARY_KEY
+  --
+  tipo_perfil: String
+  cargo_directiva: String
+  rut: String(12)
+  telefono: String(15)
+  fecha_creacion: DateTime
+  --
+  usuario_id: BigInteger FOREIGN_KEY
+}
+
+' ===== MÓDULO DE ESTUDIANTES =====
+ENTITY Curso {
+  + id: BigInteger PRIMARY_KEY
+  --
+  nombre: String(50)
+  nivel: String(20)
+  año: Integer
+}
+
+ENTITY Apoderado {
+  + id: BigInteger PRIMARY_KEY
+  --
+  rut: String(12)
+  nombre: String(100)
+  apellido_paterno: String(50)
+  apellido_materno: String(50)
+  telefono: String(15)
+  email: String
+  direccion: Text
+  fecha_registro: DateTime
+}
+
+ENTITY Estudiante {
+  + id: BigInteger PRIMARY_KEY
+  --
+  rut: String(12)
+  nombre: String(100)
+  apellido_paterno: String(50)
+  apellido_materno: String(50)
+  fecha_nacimiento: Date
+  vinculo_apoderado: String(20)
+  fecha_registro: DateTime
+  activo: Boolean
+  --
+  curso_id: BigInteger FOREIGN_KEY
+  apoderado_id: BigInteger FOREIGN_KEY
+}
+
+' ===== MÓDULO DE ACTIVIDADES =====
+ENTITY TipoActividad {
+  + id: BigInteger PRIMARY_KEY
+  --
+  nombre: String(100)
+  descripcion: Text
+}
+
+ENTITY Actividad {
+  + id: BigInteger PRIMARY_KEY
+  --
+  nombre: String(200)
+  descripcion: Text
+  fecha_inicio: Date
+  fecha_fin: Date
+  monto_por_estudiante: Decimal(10,0)
+  estado: String(20)
+  fecha_creacion: DateTime
+  --
+  tipo_id: BigInteger FOREIGN_KEY
+}
+
+ENTITY ActividadCurso {
+  + actividad_id: BigInteger FOREIGN_KEY
+  + curso_id: BigInteger FOREIGN_KEY
+  --
+  (Tabla intermedia Many-to-Many)
+}
+
+' ===== MÓDULO DE CUOTAS Y PAGOS =====
+ENTITY CuotaEstudiante {
+  + id: BigInteger PRIMARY_KEY
+  --
+  monto_total: Decimal(10,0)
+  monto_pagado: Decimal(10,0)
+  estado: String(20)
+  fecha_vencimiento: Date
+  fecha_creacion: DateTime
+  --
+  estudiante_id: BigInteger FOREIGN_KEY
+  actividad_id: BigInteger FOREIGN_KEY
+}
+
+ENTITY PagoCuota {
+  + id: BigInteger PRIMARY_KEY
+  --
+  monto: Decimal(10,0)
+  metodo_pago: String(20)
+  fecha_pago: DateTime
+  observacion: Text
+  comprobante: String(100)
+  --
+  cuota_id: BigInteger FOREIGN_KEY
+}
+
+' ===== MÓDULO DE COMUNICACIÓN =====
+ENTITY Mensaje {
+  + id: BigInteger PRIMARY_KEY
+  --
+  titulo: String(200)
+  contenido: Text
+  tipo: String(20)
+  fecha_creacion: DateTime
+  activo: Boolean
+}
+
+ENTITY ConfiguracionSistema {
+  + id: BigInteger PRIMARY_KEY
+  --
+  nombre_institucion: String(200)
+  telefono_contacto: String(15)
+  email_contacto: String
+  direccion_institucion: Text
+}
+
+' ===== RELACIONES =====
+
+' Usuarios y Perfiles
+User ||--|| PerfilUsuario : "tiene perfil"
+
+' Estudiantes y Estructura Académica
+Curso ||--o{ Estudiante : "pertenece a"
+Apoderado ||--o{ Estudiante : "responsable de"
+
+' Actividades y Cursos
+TipoActividad ||--o{ Actividad : "categoriza"
+Actividad ||--o{ ActividadCurso : "se asigna a"
+Curso ||--o{ ActividadCurso : "participa en"
+
+' Sistema de Cuotas y Pagos
+Estudiante ||--o{ CuotaEstudiante : "debe pagar"
+Actividad ||--o{ CuotaEstudiante : "genera cuota"
+CuotaEstudiante ||--o{ PagoCuota : "se paga mediante"
+
+' ===== NOTAS EXPLICATIVAS =====
+note right of PerfilUsuario
+  Tipos de Perfil:
+  - administrador
+  - directiva
+  - apoderado
+  
+  Cargos Directiva:
+  - presidenta
+  - tesorera  
+  - secretaria
+end note
+
+note right of Estudiante
+  Vínculos con Apoderado:
+  - hijo/hija
+  - padre/madre
+  - abuelo/abuela
+  - tío/tía
+  - tutor legal
+  - otro
+end note
+
+note right of Actividad
+  Estados de Actividad:
+  - planificada
+  - activa
+  - finalizada
+  - cancelada
+end note
+
+note right of CuotaEstudiante
+  Estados de Cuota:
+  - pendiente
+  - pagado
+  - vencido
+  - exento
+end note
+
+note right of PagoCuota
+  Métodos de Pago:
+  - efectivo
+  - transferencia
+  - cheque
+  - tarjeta
+end note
+
+note bottom
+  **Sistema de Gestión Escolar - Proyecto de Título**
+  
+  Funcionalidades Principales:
+  • Gestión de estudiantes y apoderados
+  • Administración de actividades escolares
+  • Control de cuotas y pagos
+  • Sistema de usuarios con roles
+  • Comunicación institucional
+  
+  Tecnologías: Django 4.2.7, SQLite, Bootstrap 5
+  Fecha: Agosto 2025
+end note
+
+@enduml
