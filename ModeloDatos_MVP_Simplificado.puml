@@ -1,0 +1,118 @@
+@startuml ModeloDatos_MVP_Simplificado
+
+title Modelo de Datos MVP Simplificado\nSistema de Gestión de Cuotas Escolares
+
+' Configuración de estilo
+skinparam class {
+    BackgroundColor<<Entity>> LightBlue
+    BackgroundColor<<Core>> LightYellow
+    BackgroundColor<<Transaction>> LightGreen
+}
+
+' ENTIDADES PRINCIPALES
+class User <<Core>> {
+    + id: PK
+    + username
+    + email
+    + first_name
+    + last_name
+}
+
+class PerfilUsuario <<Core>> {
+    + id: PK
+    + usuario_id: FK
+    + tipo_perfil
+    + rut
+    + telefono
+}
+
+class Apoderado <<Entity>> {
+    + id: PK
+    + rut
+    + nombre
+    + apellido_paterno
+    + apellido_materno
+    + telefono
+    + email
+    + direccion
+}
+
+class Estudiante <<Entity>> {
+    + id: PK
+    + rut
+    + nombre
+    + apellido_paterno
+    + apellido_materno
+    + fecha_nacimiento
+    + curso_id: FK
+    + apoderado_id: FK
+    + vinculo_apoderado
+    + activo
+}
+
+class Curso <<Entity>> {
+    + id: PK
+    + nombre
+    + nivel
+    + año
+}
+
+class Actividad <<Entity>> {
+    + id: PK
+    + nombre
+    + descripcion
+    + fecha_inicio
+    + fecha_fin
+    + monto_por_estudiante
+    + estado
+}
+
+class CuotaEstudiante <<Transaction>> {
+    + id: PK
+    + estudiante_id: FK
+    + actividad_id: FK
+    + monto_total
+    + monto_pagado
+    + estado
+    + fecha_vencimiento
+    --
+    + saldo_pendiente()
+}
+
+class PagoCuota <<Transaction>> {
+    + id: PK
+    + cuota_id: FK
+    + monto
+    + metodo_pago
+    + fecha_pago
+    + observacion
+    + comprobante
+}
+
+class Notificacion <<Core>> {
+    + id: PK
+    + tipo
+    + titulo
+    + mensaje
+    + email_destinatario
+    + estado
+    + fecha_creacion
+}
+
+' RELACIONES PRINCIPALES
+User ||--|| PerfilUsuario : "1:1"
+Apoderado ||--o{ Estudiante : "1:N"
+Curso ||--o{ Estudiante : "1:N"
+Actividad }o--o{ Curso : "M:N"
+Estudiante ||--o{ CuotaEstudiante : "1:N"
+Actividad ||--o{ CuotaEstudiante : "1:N"
+CuotaEstudiante ||--o{ PagoCuota : "1:N"
+
+' FLUJO DE NEGOCIO
+note top of CuotaEstudiante : "ENTIDAD CENTRAL:\nVincula Estudiante + Actividad\nControla estados de pago"
+
+note right of PagoCuota : "TRANSACCIONES:\nRegistra pagos parciales\nHistorial completo"
+
+note left of Notificacion : "COMUNICACIÓN:\nEmails automáticos\nSeguimiento de envíos"
+
+@enduml

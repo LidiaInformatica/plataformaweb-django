@@ -21,4 +21,4 @@ def panel_notificaciones(request):
         'total_fallidas': notificaciones.filter(estado='fallida').count(),
     }
     
-    return render(request, 'core/notificaciones.html', context)
+    return render(request, 'core/', context)

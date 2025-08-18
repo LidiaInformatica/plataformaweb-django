@@ -1,0 +1,270 @@
+@startuml ModeloDatos_MVP_PlataformaEscolar
+
+!define PRIMARY_KEY(x) <b><color:#b30000><&key></color> x</b>
+!define FOREIGN_KEY(x) <color:#0000b3><&arrow-right></color> x
+!define UNIQUE(x) <color:#b36b00><&target></color> x
+
+title Modelo de Datos MVP - Sistema de Gestión de Cuotas Escolares\nColegio Adventista Talcahuano Centro
+
+' Configuración de colores
+skinparam class {
+    BackgroundColor<<Core>> LightBlue
+    BackgroundColor<<Academic>> LightGreen  
+    BackgroundColor<<Financial>> LightYellow
+    BackgroundColor<<Django>> LightGray
+}
+
+' ENTIDADES CORE DEL SISTEMA
+class User <<Django>> {
+    PRIMARY_KEY(id) : AutoField
+    username : CharField(150)
+    first_name : CharField(30)
+    last_name : CharField(150)
+    email : EmailField
+    is_staff : BooleanField
+    is_active : BooleanField
+    date_joined : DateTimeField
+    --
+    + get_full_name()
+    + is_authenticated()
+}
+
+class PerfilUsuario <<Core>> {
+    PRIMARY_KEY(id) : AutoField
+    FOREIGN_KEY(usuario_id) : OneToOneField
+    tipo_perfil : CharField(20)
+    cargo_directiva : CharField(20) [NULL]
+    UNIQUE(rut) : CharField(12)
+    telefono : CharField(15)
+    fecha_creacion : DateTimeField
+    --
+    CHOICES: tipo_perfil
+    • administrador
+    • directiva  
+    • apoderado
+    --
+    CHOICES: cargo_directiva
+    • presidenta
+    • tesorera
+    • secretaria
+    --
+    + __str__()
+}
+
+class ConfiguracionSistema <<Core>> {
+    PRIMARY_KEY(id) : AutoField
+    nombre_institucion : CharField(200)
+    telefono_contacto : CharField(15)
+    email_contacto : EmailField
+    direccion_institucion : TextField
+    --
+    + __str__()
+}
+
+' ENTIDADES ACADÉMICAS
+class Curso <<Academic>> {
+    PRIMARY_KEY(id) : AutoField
+    nombre : CharField(50)
+    nivel : CharField(20)
+    año : IntegerField
+    --
+    + __str__()
+}
+
+class Apoderado <<Academic>> {
+    PRIMARY_KEY(id) : AutoField
+    UNIQUE(rut) : CharField(12)
+    nombre : CharField(100)
+    apellido_paterno : CharField(50)
+    apellido_materno : CharField(50)
+    telefono : CharField(15)
+    email : EmailField
+    direccion : TextField
+    fecha_registro : DateTimeField
+    --
+    + __str__()
+    + nombre_completo()
+}
+
+class Estudiante <<Academic>> {
+    PRIMARY_KEY(id) : AutoField
+    UNIQUE(rut) : CharField(12)
+    nombre : CharField(100)
+    apellido_paterno : CharField(50)
+    apellido_materno : CharField(50)
+    fecha_nacimiento : DateField
+    FOREIGN_KEY(curso_id) : ForeignKey
+    FOREIGN_KEY(apoderado_id) : ForeignKey
+    vinculo_apoderado : CharField(20)
+    fecha_registro : DateTimeField
+    activo : BooleanField
+    --
+    CHOICES: vinculo_apoderado
+    • hijo/a
+    • padre/madre
+    • abuelo/a
+    • tío/a
+    • tutor legal
+    • otro
+    --
+    + __str__()
+    + nombre_completo()
+}
+
+' ENTIDADES DE ACTIVIDADES
+class TipoActividad <<Academic>> {
+    PRIMARY_KEY(id) : AutoField
+    nombre : CharField(100)
+    descripcion : TextField
+    --
+    + __str__()
+}
+
+class Actividad <<Academic>> {
+    PRIMARY_KEY(id) : AutoField
+    nombre : CharField(200)
+    descripcion : TextField
+    FOREIGN_KEY(tipo_id) : ForeignKey
+    fecha_inicio : DateField
+    fecha_fin : DateField
+    monto_por_estudiante : DecimalField(10,0)
+    estado : CharField(20)
+    fecha_creacion : DateTimeField
+    --
+    CHOICES: estado
+    • planificada
+    • activa
+    • finalizada
+    • cancelada
+    --
+    + __str__()
+    + total_estudiantes()
+    + recaudacion_esperada()
+}
+
+' ENTIDADES FINANCIERAS
+class CuotaEstudiante <<Financial>> {
+    PRIMARY_KEY(id) : AutoField
+    FOREIGN_KEY(estudiante_id) : ForeignKey
+    FOREIGN_KEY(actividad_id) : ForeignKey
+    monto_total : DecimalField(10,0)
+    monto_pagado : DecimalField(10,0)
+    estado : CharField(20)
+    fecha_vencimiento : DateField
+    fecha_creacion : DateTimeField
+    --
+    CHOICES: estado
+    • pendiente
+    • pagado
+    • vencido
+    • exento
+    --
+    + __str__()
+    + saldo_pendiente()
+}
+
+class PagoCuota <<Financial>> {
+    PRIMARY_KEY(id) : AutoField
+    FOREIGN_KEY(cuota_id) : ForeignKey
+    monto : DecimalField(10,0)
+    metodo_pago : CharField(20)
+    fecha_pago : DateTimeField
+    observacion : TextField
+    comprobante : CharField(100)
+    --
+    CHOICES: metodo_pago
+    • efectivo
+    • transferencia
+    • cheque
+    • tarjeta
+    --
+    + __str__()
+}
+
+class Notificacion <<Core>> {
+    PRIMARY_KEY(id) : AutoField
+    tipo : CharField(30)
+    titulo : CharField(200)
+    mensaje : TextField
+    email_destinatario : EmailField
+    nombre_destinatario : CharField(100)
+    estado : CharField(20)
+    fecha_creacion : DateTimeField
+    fecha_envio : DateTimeField [NULL]
+    error_envio : TextField
+    actividad_id : IntegerField [NULL]
+    estudiante_id : IntegerField [NULL]
+    --
+    CHOICES: tipo
+    • nueva_actividad
+    • recordatorio_pago
+    • pago_recibido
+    • actividad_vencida
+    • sistema
+    --
+    CHOICES: estado
+    • pendiente
+    • enviada
+    • fallida
+    --
+    + __str__()
+}
+
+' TABLA INTERMEDIA MANY-TO-MANY
+class ActividadCurso {
+    PRIMARY_KEY(id) : AutoField
+    FOREIGN_KEY(actividad_id) : ForeignKey
+    FOREIGN_KEY(curso_id) : ForeignKey
+}
+
+' RELACIONES PRINCIPALES
+User ||--|| PerfilUsuario : "extiende"
+Apoderado ||--o{ Estudiante : "tiene responsabilidad"
+Curso ||--o{ Estudiante : "pertenece a"
+TipoActividad ||--o{ Actividad : "categoriza"
+Actividad }o--o{ Curso : "asignada a"
+Estudiante ||--o{ CuotaEstudiante : "genera"
+Actividad ||--o{ CuotaEstudiante : "origina"
+CuotaEstudiante ||--o{ PagoCuota : "recibe"
+
+' RELACIONES ADICIONALES
+note right of PerfilUsuario : "Extiende User de Django\ncon información específica\ndel dominio escolar"
+
+note right of CuotaEstudiante : "Entidad central que vincula\nEstudiantes con Actividades\ny gestiona estados de pago"
+
+note right of PagoCuota : "Registra historial completo\nde pagos con trazabilidad\ny métodos utilizados"
+
+note bottom of Notificacion : "Sistema de comunicación\nautomatizada por email\ncon tracking de estado"
+
+' CARDINALIDADES
+note top of User : "1 Usuario puede tener 1 Perfil"
+note top of Apoderado : "1 Apoderado puede tener N Estudiantes"
+note top of Curso : "1 Curso puede tener N Estudiantes"
+note top of Actividad : "M Actividades ↔ N Cursos"
+note bottom of CuotaEstudiante : "1 Estudiante + 1 Actividad = 1 Cuota"
+note bottom of PagoCuota : "1 Cuota puede tener N Pagos"
+
+' LEYENDA
+legend top left
+|= <size:12><b>LEYENDA DEL MODELO</b> =|
+| <color:#b30000><&key></color> | Clave Primaria |
+| <color:#0000b3><&arrow-right></color> | Clave Foránea |
+| <color:#b36b00><&target></color> | Campo Único |
+| <<Core>> | Entidades del sistema |
+| <<Academic>> | Entidades académicas |
+| <<Financial>> | Entidades financieras |
+| <<Django>> | Entidades de Django |
+endlegend
+
+' NOTAS DE IMPLEMENTACIÓN
+note as N1
+<b>CONSIDERACIONES MVP:</b>
+• User utiliza el modelo estándar de Django
+• PerfilUsuario extiende User con roles específicos
+• CuotaEstudiante es la entidad central del negocio
+• PagoCuota permite pagos parciales múltiples
+• Notificacion maneja comunicación automatizada
+• Actividad se relaciona M:N con Curso via tabla intermedia
+end note
+
+@enduml

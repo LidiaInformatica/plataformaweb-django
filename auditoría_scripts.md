@@ -1,0 +1,36 @@
+
+### Auditoría 2025-08-12 16:41:12
+- `add_column.py` movido a `scripts_backup/`
+- `add_column_final.py` movido a `scripts_backup/`
+- `apply_migration.py` movido a `scripts_backup/`
+- `asociar_apoderados.py` movido a `scripts_backup/`
+- `check_usuarios.py` movido a `scripts_backup/`
+- `clean_templates.py` movido a `scripts_backup/`
+- `corregir_curso_benjamin.py` movido a `scripts_backup/`
+- `corregir_datos_benjamin.py` movido a `scripts_backup/`
+- `corregir_estudiante.py` movido a `scripts_backup/`
+- `corregir_niveles_cursos.py` movido a `scripts_backup/`
+- `crear_admin.py` movido a `scripts_backup/`
+- `crear_asociaciones_apoderados.py` movido a `scripts_backup/`
+- `crear_cuotas_gala.py` movido a `scripts_backup/`
+- `crear_cuotas_pendientes.py` movido a `scripts_backup/`
+- `crear_estudiantes_4medio.py` movido a `scripts_backup/`
+- `crear_usuarios_perfiles.py` movido a `scripts_backup/`
+- `crear_usuarios_rapido.py` movido a `scripts_backup/`
+- `emergency_fix.py` movido a `scripts_backup/`
+- `fix_column.py` movido a `scripts_backup/`
+- `fix_database.py` movido a `scripts_backup/`
+- `fix_db_django.py` movido a `scripts_backup/`
+- `fix_estudiante_view.py` movido a `scripts_backup/`
+- `inicializar_actividades.py` movido a `scripts_backup/`
+- `limpiar_cursos.py` movido a `scripts_backup/`
+- `limpieza_templates.py` movido a `scripts_backup/`
+- `probar_sistema_completo.py` movido a `scripts_backup/`
+- `recreate_database_clean.py` movido a `scripts_backup/`
+- `recreate_db.py` movido a `scripts_backup/`
+- `recreate_table.py` movido a `scripts_backup/`
+- `registrar_pago_benjamin.py` movido a `scripts_backup/`
+- `start_complete.py` movido a `scripts_backup/`
+- `test_model.py` movido a `scripts_backup/`
+- `verificar_usuarios.py` movido a `scripts_backup/`
+- `verify_fix.py` movido a `scripts_backup/`
