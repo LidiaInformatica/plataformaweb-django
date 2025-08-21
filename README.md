@@ -79,6 +79,17 @@ http://localhost:8000/admin
 Superusuario: Lidia
 Contraseña: admin123
 
+## Base de datos funcional incluida
+
+Este repositorio incluye el archivo `db.sqlite3` con datos reales del sistema escolar digital. Esto permite:
+
+- Acceder al dashboard con datos funcionales
+- Validar el login y flujo de pagos
+- Visualizar estudiantes, actividades y notificaciones
+
+No es necesario ejecutar scripts de poblamiento. Solo aplicar migraciones si se reconstruye desde cero.
+- El dashboard muestra datos reales de estudiantes, pagos y notificaciones
+
 ---Validación funcional---
 El sistema se ejecuta correctamente en entorno Docker
 El login funciona con credenciales reales
