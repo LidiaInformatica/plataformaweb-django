@@ -112,3 +112,13 @@ Backend: Django 4.2.7 / Python 3.13
 Frontend: Bootstrap 5.3 + JavaScript
 Notificaciones: Gmail SMTP (en desarrollo)
 
+---
+
+## Historial de versiones
+
+| Versión | Fecha | Descripción | Rama asociada |
+|---------|-------|-------------|----------------|
+| v1.0 | 2025-08-10 | Versión inicial con funcionalidades básicas | `main` |
+| v1.1 | 2025-08-21 | Dockerización reproducible, corrección de dependencias, validación funcional y mejora en documentación | `avance-60porciento` |
+
+
