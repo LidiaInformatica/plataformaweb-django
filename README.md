@@ -68,24 +68,21 @@ El sistema está dockerizado para garantizar reproducibilidad y trazabilidad.
 docker build -t plataformaweb-django .
 docker run -p 8000:8000 plataformaweb-django
 
-Acceso
-http://127.0.0.1:8000/
+Acceso  
+http://localhost:8000/
 
 Usuario: Lidia 
 Contraseña: admin123
 
-http://127.0.0.1:8000/admin
+http://localhost:8000/admin
 
 Superusuario: Lidia
 Contraseña: admin123
 
 ---Validación funcional---
 El sistema se ejecuta correctamente en entorno Docker
-
 El login funciona con credenciales reales
-
 Se accede al dashboard y al módulo de pagos
-
 Se han realizado pruebas manuales de flujo
 
 ---Estructura del Proyecto---
