@@ -127,9 +127,11 @@ Notificaciones: Gmail SMTP (en desarrollo)
 
 ## Historial de versiones
 
-| Versión | Fecha | Descripción | Rama asociada |
-|---------|-------|-------------|----------------|
-| v1.0 | 2025-08-10 | Versión inicial con funcionalidades básicas | `main` |
-| v1.1 | 2025-08-21 | Dockerización reproducible, corrección de dependencias, validación funcional y mejora en documentación | `avance-60porciento` |
+| Versión | Fecha    | Descripción                                 | Rama asociada        |
+|---------|----------|---------------------------------------------|----------------------|
+| v1.0    |2025-08-10| Versión inicial con funcionalidades básicas | `main`               |
+| v1.1    |2025-08-21| Dockerización reproducible, corrección de   | `avance-60porciento` |
+|         |          | dependencias, validación funcional y mejora |                      |
+|         |          | en documentación                            |                      |
 
 
