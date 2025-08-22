@@ -3,6 +3,21 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.db.models import Sum
+# Traducción manual de meses al español
+MESES_ES = {
+    'January': 'Enero',
+    'February': 'Febrero',
+    'March': 'Marzo',
+    'April': 'Abril',
+    'May': 'Mayo',
+    'June': 'Junio',
+    'July': 'Julio',
+    'August': 'Agosto',
+    'September': 'Septiembre',
+    'October': 'Octubre',
+    'November': 'Noviembre',
+    'December': 'Diciembre',
+}
 
 @login_required
 def dashboard(request):
@@ -62,9 +77,9 @@ def dashboard(request):
     ).order_by('-fecha_creacion')[:10]
     
     # Contar notificaciones no leídas para el usuario actual
-    notificaciones_no_leidas = Notificacion.objects.filter(
-        apoderado_email=request.user.email,
-        estado__in=['enviado', 'visto']
+    total_no_leidas = Notificacion.objects.filter(
+    apoderado_email=request.user.email,
+    leida=False
     ).count()
     
     notificaciones_automaticas = []
@@ -80,17 +95,20 @@ def dashboard(request):
             'tipo': notif.get_tipo_display(),
             'estado': notif.estado
         })
-    
+
+    hoy = timezone.now().date()
+    mes_en = hoy.strftime('%B')
+    mes_es = MESES_ES.get(mes_en, mes_en)
     context = {
         'recaudacion_total': recaudacion_total,
         'cuotas_pendientes': cuotas_pendientes,
         'actividades_activas': actividades_activas,
         'total_estudiantes': total_estudiantes,
         'ultimos_pagos': ultimos_pagos,
-        'mes_actual': hoy.strftime('%B %Y').title(),
+        'mes_actual': f"{mes_es} de {hoy.year}",
         'mensajes_alertas': mensajes_alertas,
         'notificaciones_automaticas': notificaciones_automaticas,
-        'notificaciones_no_leidas': notificaciones_no_leidas,
+        'notificaciones_no_leidas': total_no_leidas,
     }
     
     return render(request, 'core/dashboard.html', context)

@@ -25,10 +25,9 @@ def lista_notificaciones(request):
         notificaciones_page = paginator.get_page(page)
         
         # Marcar como vistas si no lo están
-        notificaciones_no_vistas = notificaciones.filter(estado='enviado')
-        if notificaciones_no_vistas.exists():
-            notificaciones_no_vistas.update(estado='visto')
-            logger.info(f"Marcadas {notificaciones_no_vistas.count()} notificaciones como vistas para {request.user.email}")
+        notificaciones_no_leidas = notificaciones.filter(leida=False)
+        if notificaciones_no_leidas.exists():
+            logger.info(f"Marcadas {notificaciones_no_leidas.count()} notificaciones como leídas para {request.user.email}")
         
         context = {
             'notificaciones': notificaciones_page,
@@ -53,8 +52,8 @@ def detalle_notificacion(request, notificacion_id):
         )
         
         # Marcar como leída si no lo está
-        if notificacion.estado != 'leido':
-            notificacion.estado = 'leido'
+        if notificacion.leida is False:
+            notificacion.leida = True
             notificacion.save()
             logger.info(f"Notificación {notificacion_id} marcada como leída por {request.user.email}")
         

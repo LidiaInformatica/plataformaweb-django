@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load form_filters %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4"><i class="bi bi-envelope-plus"></i> Enviar Notificación Manual</h2>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_apoderado" class="form-label">Apoderado</label>
+          {{ form.apoderado|add_class:"form-select" }}
+        </div>
+        <div class="mb-3">
+          <label for="id_asunto" class="form-label">Asunto</label>
+          {{ form.asunto|add_class:"form-control" }}
+        </div>
+        <div class="mb-3">
+          <label for="id_mensaje" class="form-label">Mensaje</label>
+          {{ form.mensaje|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-success">
+          <i class="bi bi-send-check"></i> Enviar Notificación
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <h5>¿Cómo funciona esta funcionalidad?</h5>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><strong>Envío por Email:</strong> Se envía al correo del apoderado usando plantilla HTML.</li>
+      <li class="list-group-item"><strong>Registro en Base de Datos:</strong> Se guarda como notificación persistente.</li>
+      <li class="list-group-item"><strong>Visualización Web:</strong> Aparece en la bandeja de notificaciones del usuario.</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
