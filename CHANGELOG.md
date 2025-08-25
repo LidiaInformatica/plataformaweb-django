@@ -25,7 +25,11 @@ Registro de cambios técnicos del sistema escolar digital — Colegio Adventista
 - README inicial sin instrucciones reproducibles
 - No se incluía Docker ni control de versiones completo
 
-## Próxima versión: v1.1.2 (pendiente)
-- Corrección de advertencia en módulo `Notificación`
-- Validación de envío automático y visualización en dashboard
-- Documentación técnica en release note y `README.md`
+## v1.2.0 - Módulo de Notificaciones y mejoras defendibles (22-08-2025)
+-Se corrige cálculo del mes en español en dashboard.html usando locale.setlocale y strftime('%B')
+-Se eliminan modelos duplicados y scripts huérfanos tras auditoría manual (core/models.py, core/scripts/)
+-Se valida configuración SMTP en entorno dockerizado y envío real desde shell Django
+-Se crea vista protegida para enviar notificaciones manuales a apoderados vinculados (enviar_notificacion_manual.html)
+-Se agregan filtros personalizados en templatetags/form_filters.py para mejorar la visualización de formularios
+-Se mejora la estética y usabilidad de vistas (base.html, lista.html, dashboard.css)
+-Se documenta cada avance en release_note_v1.2.0.md y README.md, con evidencia técnica y visual
