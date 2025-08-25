@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Pago - Plataforma Web Escolar{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-plus me-2"></i>Registrar Nuevo Pago
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Estudiantes con Deuda -->
+                <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-2"></i>Estudiantes con Deuda Pendiente</h6>
+                    <div class="row">
+                        {% for estudiante in estudiantes_con_deuda %}
+                        <div class="col-md-4 mb-2">
+                            <div class="card">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title mb-1">{{ estudiante.nombre }}</h6>
+                                    <p class="card-text small mb-1">{{ estudiante.actividad }}</p>
+                                    <p class="card-text text-danger fw-bold mb-0">
+                                        Saldo: ${{ estudiante.saldo_pendiente|floatformat:0 }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Estudiante</label>
+                            <select id="select-estudiante" class="form-select mb-2" name="estudiante" required>
+                                <option value="">Seleccione estudiante</option>
+                                {% for estudiante in estudiantes_con_deuda %}
+                                <option value="{{ estudiante.id }}" data-saldo="{{ estudiante.saldo_pendiente }}">
+                                    {{ estudiante.nombre }} (RUT: {{ estudiante.rut }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Actividad</label>
+                            <select id="select-actividad" class="form-select mb-2" name="actividad" required>
+                                <option value="">Seleccione actividad</option>
+                                {% for actividad in actividades_disponibles %}
+                                <option value="{{ actividad.nombre }}">{{ actividad.nombre }} (Valor: ${{ actividad.valor }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mes a cancelar</label>
+                            <select id="select-mes" name="mes" class="form-select mb-2" required>
+                                <option value="">Seleccione mes</option>
+                                <option value="marzo">Marzo</option>
+                                <option value="abril">Abril</option>
+                                <option value="mayo">Mayo</option>
+                                <option value="junio">Junio</option>
+                                <option value="julio">Julio</option>
+                                <option value="agosto">Agosto</option>
+                                <option value="septiembre">Septiembre</option>
+                                <option value="octubre">Octubre</option>
+                                <option value="noviembre">Noviembre</option>
+                                <option value="diciembre">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Monto Pendiente</label>
+                            <div id="saldo-pendiente" class="form-control bg-light text-danger fw-bold">
+                                Seleccione estudiante y actividad
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.monto.label_tag }}
+                            {{ form.monto }}
+                            {% if form.monto.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.monto.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Método de Pago *</label>
+                            <select name="metodo_pago" class="form-select mb-2" required>
+                                <option value="">Seleccione método de pago</option>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="transferencia">Transferencia</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.observacion.label_tag }}
+                            {{ form.observacion }}
+                            {% if form.observacion.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.observacion.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                        <button type="submit" class="btn btn-success w-100 w-md-auto">
+                            <i class="fas fa-save me-1"></i>Registrar Pago
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary w-100 w-md-auto">
+                            <i class="fas fa-eraser me-1"></i>Limpiar Formulario
+                        </button>
+                    </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                            <div class="text-success fw-bold mt-3">
+                                <i class="fas fa-check-circle me-1"></i>{{ message }}
+                            </div>
+                        {% elif message.tags == 'error' %}
+                            <div class="text-danger fw-bold mt-3">
+                                <i class="fas fa-times-circle me-1"></i>{{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+console.log('🚀 Iniciando JavaScript de registro de pagos');
+
+function actualizarSaldoPendiente() {
+    var estudianteSelect = document.getElementById('select-estudiante');
+    var actividadSelect = document.getElementById('select-actividad');
+    var saldoDiv = document.getElementById('saldo-pendiente');
+    var montoInput = document.getElementById('id_monto');
+    
+    console.log('🔍 Verificando selecciones...');
+    console.log('Estudiante:', estudianteSelect.value);
+    console.log('Actividad:', actividadSelect.value);
+    
+    if (estudianteSelect.value && actividadSelect.value) {
+        // Obtener el saldo del data-attribute del estudiante seleccionado
+        var selectedOption = estudianteSelect.options[estudianteSelect.selectedIndex];
+        var saldo = selectedOption.getAttribute('data-saldo');
+        
+        console.log('💰 Saldo encontrado:', saldo);
+        
+        if (saldo && saldo > 0) {
+            saldoDiv.innerHTML = '$' + Number(saldo).toLocaleString();
+            saldoDiv.className = 'form-control bg-danger text-white fw-bold';
+            
+            // Auto-llenar monto si está vacío
+            if (!montoInput.value) {
+                montoInput.value = saldo;
+            }
+            console.log('✅ Monto pendiente actualizado: $' + saldo);
+        } else {
+            saldoDiv.innerHTML = 'Sin deuda pendiente';
+            saldoDiv.className = 'form-control bg-success text-white fw-bold';
+            console.log('✅ Sin deuda pendiente');
+        }
+    } else {
+        saldoDiv.innerHTML = 'Seleccione estudiante y actividad';
+        saldoDiv.className = 'form-control bg-light text-muted';
+        console.log('⚠️ Faltan selecciones');
+    }
+}
+
+// Ejecutar cuando se carga la página
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 Configurando eventos');
+    
+    document.getElementById('select-estudiante').addEventListener('change', function() {
+        console.log('🔄 Estudiante cambió a:', this.value);
+        actualizarSaldoPendiente();
+    });
+    
+    document.getElementById('select-actividad').addEventListener('change', function() {
+        console.log('🔄 Actividad cambió a:', this.value);
+        actualizarSaldoPendiente();
+    });
+    
+    // Llamar inicialmente
+    actualizarSaldoPendiente();
+});
+</script>
+
+{% endblock %}

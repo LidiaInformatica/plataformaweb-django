@@ -121,6 +121,34 @@ class ServicioNotificaciones:
             return False
     
     @staticmethod
+    def crear_notificacion(tipo, titulo, mensaje, apoderado_email, datos_adicionales=None):
+        """
+        Crea una notificación en la base de datos sin enviar correo
+        """
+        from core.models import Notificacion, User
+
+        try:
+            usuario = User.objects.filter(email=apoderado_email).first()
+            if not usuario:
+                return None
+
+            notificacion = Notificacion.objects.create(
+                usuario_registra=usuario,
+                apoderado_nombre=datos_adicionales.get('usuario', 'Desconocido'),
+                apoderado_email=apoderado_email,
+                titulo=titulo,
+                mensaje=mensaje,
+                tipo=tipo,
+                estado='pendiente',
+                fecha_creacion=timezone.now()
+            )
+            return notificacion
+
+        except Exception as e:
+            logger.error(f"Error al crear notificación: {str(e)}")
+            return None
+    
+    @staticmethod
     def probar_notificacion_demo():
         """
         Envía un email de prueba para demostrar el funcionamiento

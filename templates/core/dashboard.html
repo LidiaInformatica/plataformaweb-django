@@ -179,7 +179,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for notif in notificaciones_automaticas|slice:":5" %}
+                            {% for notif in notificaciones_automaticas %}
                             <tr>
                                 <td>
                                     {% if notif.tipo == 'recordatorio' %}

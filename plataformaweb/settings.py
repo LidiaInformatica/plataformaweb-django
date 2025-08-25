@@ -18,7 +18,7 @@ SECRET_KEY = 'django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -255,12 +255,12 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'lidia.inostroza18@gmail.com'  # Tu email
-EMAIL_HOST_PASSWORD = 'mxvh fqeo xtfq cpry'  # Contraseña de aplicación de Gmail
+EMAIL_HOST_PASSWORD = 'rkca kojz wkcg mqti'  # Contraseña de aplicación de Gmail
 EMAIL_USE_SSL = False
 
 # Email por defecto para notificaciones del sistema
-DEFAULT_FROM_EMAIL = 'Colegio Adventista <lidia.inostroza18@gmail.com>'
+DEFAULT_FROM_EMAIL = 'lidia.inostroza18@gmail.com'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-# Email de la administradora (tu email)
+# Email del admin
 ADMIN_EMAIL = 'lidia.inostroza18@gmail.com'

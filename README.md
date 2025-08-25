@@ -1,231 +1,150 @@
-# Plataforma Web Escolar
 
-Sistema de gestión escolar desarrollado en Django para el control de estudiantes, actividades y cuotas de pago.
+**Autora:** Lidia Andrea Inostroza Yáñez  
+**Proyecto:** Sistema de Gestión Digital de Cuotas Escolares  
+**Avance actual:** 77% de requerimientos funcionales implementados  
+**Versión del repositorio:** `v1.2.0` — rama `avance-60porciento` extendida
 
-## ✅ PROYECTO CONFIGURADO Y LISTO PARA USAR
+---
 
-### 🚀 Inicio Rápido
+## Contexto del Proyecto
 
-Para iniciar el proyecto, ejecuta uno de estos comandos:
+Este sistema responde a una necesidad concreta del Colegio Adventista Talcahuano Centro: digitalizar la gestión de cuotas escolares voluntarias por curso. Actualmente, esta gestión se realiza de forma informal, lo que genera problemas de trazabilidad, transparencia y sobrecarga operativa.
+
+---
+
+## Objetivo General
+
+Diseñar y desarrollar una plataforma web modular que permita:
+
+- Registrar pagos voluntarios por actividad  
+- Visualizar estado de cuotas por estudiante  
+- Generar reportes exportables  
+- Enviar notificaciones automáticas  
+- Segmentar vistas por perfil institucional  
+
+---
+
+## Cronograma y avance por fases
+
+| Fase       | Estado   | % Avance |
+|------------|----------|----------|
+| Análisis   | ✅       | 100%     |
+| Diseño     | ✅       | 100%     |
+| Desarrollo | ✅       | 77%      |
+| Testing    | ⏳       | 0%       |
+| Cierre     | ⏳       | 0%       |
+
+---
+
+## Requerimientos funcionales desarrollados
+
+| Código  | Descripción                                         | Estado   |
+|---------|-----------------------------------------------------|----------|
+| RF-01   | Registrar cuotas escolares por actividad            | ✅       |
+| RF-02   | Visualizar estado de pago por alumno                | ✅       |
+| RF-03   | Acceder con sesión segmentada                       | ⚠️ Parcial |
+| RF-04   | Filtrar actividad por nombre/RUT/curso              | ✅       |
+| RF-05   | Exportar información PDF/Excel                      | ⚠️ Parcial |
+| RF-06   | Notificaciones automáticas                          | ✅       |
+| RF-07   | Validar campos obligatorios                         | ✅       |
+| RF-08   | Visualizar mensajes y alertas                       | ✅       |
+| RF-09   | Crear alumno y apoderado desde la plataforma        | ⚠️ Parcial |
+
+---
+
+## Módulo de Notificaciones — Avance técnico
+
+El módulo pasó de estar en desarrollo parcial a estar funcional y validado. Se realizaron las siguientes mejoras:
+
+- Configuración SMTP funcional con Gmail  
+- Validación de envío real desde el shell de Django  
+- Creación de vista protegida con formulario validado (`enviar_notificacion_manual.html`)  
+- Integración de botón estilizado en el dashboard (`dashboard.html`, `dashboard.css`)  
+- Corrección de lógica `leida=True` para evitar falsos positivos  
+- Localización del mes en español con `locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')`  
+- Eliminación de modelos duplicados y scripts huérfanos (`core/models.py`, `core/scripts/`)  
+- Ajuste de configuración SMTP y prefijo de asunto (`settings.py`)  
+- Documentación técnica y evidencia reproducible
+
+---
+
+## Dockerización del entorno
+
+**Requisitos:**
+
+- Docker instalado en Windows  
+- Proyecto ubicado en `C:\plataformaweb-django`  
+
+**Comandos:**
 
 ```powershell
-# Opción 1: Script automático (recomendado)
-.\iniciar_servidor.ps1
+docker build -t plataformaweb-django .
+docker run -p 8000:8000 plataformaweb-django
 
-# Opción 2: Comandos manuales
-cd "c:\Users\Pc38\Downloads\plataformaweb-django"
-.\venv\Scripts\Activate.ps1
-python manage.py runserver
-```
+- Acceso
+Plataforma: http://localhost:8000/
 
-Luego abre tu navegador en: **http://127.0.0.1:8000**
+Usuario: Lidia / Contraseña: admin123
+Admin: http://localhost:8000/admin
 
-### 📋 Scripts Disponibles
+- Base de datos funcional incluida
+Este repositorio incluye el archivo db.sqlite3 con datos reales del sistema escolar digital. Esto permite:
 
-- **`iniciar_servidor.ps1`** - Configuración completa y automática
-- **`start_server.ps1`** - Inicio rápido del servidor
-- **`crear_superusuario.ps1`** - Crear usuario administrador
-- **`verificar_sistema.ps1`** - Verificar que todo funcione correctamente
+Acceder al dashboard con datos funcionales
+Validar el login y flujo de pagos
+Visualizar estudiantes, actividades y notificaciones
 
-### 🛠️ Tecnologías
+No es necesario ejecutar scripts de poblamiento. Solo aplicar migraciones si se reconstruye desde cero.
 
-- **Django 4.2.7** ✅ Instalado
-- **Pillow** ✅ Instalado
-- **python-decouple** ✅ Instalado
-- **SQLite** ✅ Base de datos configurada
+- Validación funcional
 
-## Características Principales
+El sistema se ejecuta correctamente en entorno Docker
+Login funcional con credenciales reales
+Acceso al dashboard y módulo de pagos
+Pruebas manuales de flujo completadas
+Envío de correos reales validado desde el shell
+Evidencias técnicas y visuales documentadas
 
-### 🏫 Gestión Institucional
-- Dashboard con resumen mensual de recaudación
-- Segmentación de perfiles (Apoderado/Directiva)
-- Sistema de mensajes y configuración
+- Estructura del Proyecto
 
-### 👥 Gestión de Estudiantes
-- Registro de estudiantes y apoderados
-- Control de vínculos familiares
-- Información de contacto y cursos
+plaintext
+plataformaweb-django/
+├── core/             # Dashboard y perfiles institucionales
+├── estudiantes/      # Gestión de estudiantes y apoderados
+├── actividades/      # Registro y control de actividades escolares
+├── cuotas/           # Módulo de pagos y estado de cuotas
+├── accounts/         # Autenticación y perfiles segmentados
+├── templates/        # Plantillas HTML
+│   ├── base.html
+│   ├── core/
+│   ├── estudiantes/
+│   ├── actividades/
+│   └── cuotas/
+├── static/           # Archivos estáticos
+│   ├── css/
+│   └── js/
+├── scripts/          # Scripts de automatización y prueba
+│   ├── iniciar_servidor.ps1
+│   ├── crear_superusuario.ps1
+│   ├── verificar_sistema.ps1
+│   └── crear_usuarios_prueba.py
+├── Dockerfile        # Dockerización del entorno
+├── requirements.txt  # Dependencias del proyecto
+└── README.md         # Documentación técnica
 
-### 📅 Gestión de Actividades
-- Registro de actividades escolares
-- Asignación por cursos y fechas
-- Control de montos por estudiante
-- Filtros avanzados y exportación
 
-### 💰 Gestión de Cuotas
-- Vinculación estudiante-actividad
-- Registro de pagos con validación
-- Estados de pago (Pendiente/Pagado/Vencido)
-- Historial de transacciones
+- Control de versione
 
-## Estructura del Proyecto
+Versión	Fecha	    Descripción                                                         	    Rama asociada
+v1.0	2025-08-10	Versión inicial con funcionalidades básicas	                                main
+v1.1.0	2025-08-15	Dockerización reproducible y validación	                                    avance-60porciento
+v1.1.1	2025-08-21	Base de datos funcional, mejoras SMTP y documentación técnica defendible    avance-60porciento
+v1.2.0	2025-08-24	Corrección de notificaciones, mejoras estéticas y validación SMTP en Docker	avance-60porciento
 
-\`\`\`
-plataformaweb/
-├── core/                   # App principal - Dashboard y perfiles
-├── estudiantes/           # Gestión de estudiantes y apoderados
-├── actividades/          # Gestión de actividades escolares
-├── cuotas/              # Gestión de cuotas y pagos
-├── templates/           # Plantillas HTML
-│   ├── base.html       # Plantilla base
-│   ├── core/           # Templates del core
-│   ├── estudiantes/    # Templates de estudiantes
-│   ├── actividades/    # Templates de actividades
-│   └── cuotas/         # Templates de cuotas
-├── static/             # Archivos estáticos
-│   ├── css/           # Estilos CSS
-│   └── js/            # Scripts JavaScript
-└── plataformaweb/     # Configuración del proyecto
-\`\`\`
-
-## Tecnologías Utilizadas
-
-- **Backend**: Django 4.2.7
-- **Base de Datos**: SQLite3
-- **Frontend**: Bootstrap 5.1.3
-- **Iconos**: Font Awesome 6.0.0
-- **Estilos**: CSS personalizado
-
-## Instalación y Configuración
-
-### Prerrequisitos
-- Python 3.8 o superior
-- pip (gestor de paquetes de Python)
-
-### Pasos de Instalación
-
-1. **Clonar el repositorio**
-\`\`\`bash
-git clone <url-del-repositorio>
-cd plataformaweb
-\`\`\`
-
-2. **Crear entorno virtual**
-\`\`\`bash
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-\`\`\`
-
-3. **Instalar dependencias**
-\`\`\`bash
-pip install -r requirements.txt
-\`\`\`
-
-4. **Configurar base de datos**
-\`\`\`bash
-python manage.py makemigrations
-python manage.py migrate
-\`\`\`
-
-5. **Crear superusuario**
-\`\`\`bash
-python manage.py createsuperuser
-\`\`\`
-
-6. **Crear usuarios de prueba (opcional)**
-\`\`\`bash
-python scripts/crear_usuarios_prueba.py
-\`\`\`
-
-7. **Ejecutar servidor de desarrollo**
-\`\`\`bash
-python manage.py runserver
-\`\`\`
-
-8. **Acceder a la aplicación**
-- Aplicación: http://127.0.0.1:8000/
-- Login: http://127.0.0.1:8000/accounts/login/
-- Admin: http://127.0.0.1:8000/admin/
-
-### Usuarios de Prueba
-- **Administrador**: Lidia | Contraseña: 'admin123'
-- **Apoderado**: RUT `12345678k` | Contraseña: `password123`
-- **Directiva**: RUT `98765432j` | Contraseña: `password123`
-
-## Funcionalidades Implementadas
-
-### ✅ Dashboard (Core)
-- **RF-08**: Resumen mensual con métricas clave y bandeja de mensajes por perfil
-- Últimos pagos registrados con estados
-- Accesos rápidos a funciones principales
-- **RF-03**: Perfil de usuario con segmentación (Apoderado/Directiva)
-
-### ✅ Estudiantes
-- Lista completa con información de estudiantes y apoderados
-- Datos de vínculos familiares y contacto
-- Estadísticas generales del sistema
-
-### ✅ Actividades
-- **RF-09**: Lista con filtros avanzados por tipo, curso y fechas
-- Información detallada de fechas, montos y cursos asignados
-- Estados de actividades (Activa/Planificada/Finalizada)
-- **RF-05**: Simulación de exportación en PDF y Excel
-
-### ✅ Cuotas y Pagos
-- **RF-01**: Registro de cuotas escolares por actividad
-- **RF-02**: Visualización del estado de pago por apoderado
-- **RF-04**: Filtros avanzados por nombre, RUT y actividad
-- **RF-07**: Formulario con validación completa de campos obligatorios
-- **RF-09**: Historial detallado de cuotas por actividad específica
-- Estados de pago y control de saldos pendientes
-
-### ✅ Sistema de Notificaciones
-- **RF-06**: Notificaciones automáticas de nuevas cuotas y pagos pendientes
-- **RF-08**: Bandeja de mensajes y alertas segmentada por perfil
-- Configuración personalizable de notificaciones
-- Alertas de vencimiento y recordatorios automáticos
-
-### ✅ Exportación de Datos
-- **RF-05**: Exportación simulada en formatos PDF y Excel
-- Reportes por actividad y estado de pagos
-- Filtros aplicables a las exportaciones
-
-### ✅ Sistema de Autenticación
-- **Login/Logout**: Sistema completo de inicio y cierre de sesión
-- **Registro de usuarios**: Formulario de registro con validación de RUT
-- **Perfiles de usuario**: Segmentación Apoderado/Directiva
-- **Middleware de perfiles**: Control de acceso según tipo de usuario
-- **Cambio de contraseña**: Funcionalidad segura de cambio de contraseña
-- **Validación de formularios**: Validación completa de RUT y datos
-
-## Características Técnicas
-
-### Formateo de Moneda
-- Formato chileno sin decimales
-- Separador de miles con punto
-- Símbolo peso ($) precediendo el valor
-- Ejemplo: $15.000
-
-### Validación de Formularios
-- Campos obligatorios marcados
-- Validación de montos positivos
-- Mensajes de error contextuales
-- Alertas de éxito/error
-
-### Diseño Responsivo
-- Compatible con dispositivos móviles
-- Interfaz adaptativa con Bootstrap
-- Navegación optimizada para touch
-
-### Datos Simulados
-- Sistema funcional con datos de prueba
-- Estudiantes, actividades y pagos simulados
-- Métricas realistas para demostración
-
-## Próximas Funcionalidades
-
-- [ ] Sistema de autenticación real
-- [ ] Exportación real a Excel/CSV
-- [ ] Reportes avanzados
-- [ ] Notificaciones por email
-- [ ] API REST
-- [ ] Integración con sistemas de pago
-
-## Contribución
-
-1. Fork el proyecto
-2. Crear rama para nueva funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit los cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear Pull Request
-
+-Documentación técnica
+Arquitectura: patrón MVT (Model-View-Template)
+Base de datos: SQLite
+Backend: Django 4.2.7 / Python 3.13
+Frontend: Bootstrap 5.3 + JavaScript
+Notificaciones: Gmail SMTP (validado)
+>>>>>>> avance-60porciento
