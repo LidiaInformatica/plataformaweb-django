@@ -141,6 +141,11 @@ v1.1.0	2025-08-15	Dockerización reproducible y validación	                    
 v1.1.1	2025-08-21	Base de datos funcional, mejoras SMTP y documentación técnica defendible    avance-60porciento
 v1.2.0	2025-08-24	Corrección de notificaciones, mejoras estéticas y validación SMTP en Docker	avance-60porciento
 
+## Merge técnico: avance-60porciento → master
+
+El 25 de agosto de 2025 se realizó el merge acumulativo desde la rama `avance-60porciento` hacia `master`, integrando todos los avances desde la versión inicial hasta `v1.2.0`. Se resolvió un conflicto en `README.md`, conservando la versión defendible con mejoras estéticas, trazabilidad y evidencia técnica. Este paso marca el cierre funcional del módulo de notificaciones y la consolidación del sistema escolar digital.
+
+
 -Documentación técnica
 Arquitectura: patrón MVT (Model-View-Template)
 Base de datos: SQLite
