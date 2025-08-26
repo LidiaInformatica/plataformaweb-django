@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'cuotas',
     'accounts',
     'django_extensions',
+    'core.notificaciones',
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,7 @@ NUMBER_GROUPING = 3
 
 # Configuración de autenticación
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/redireccion/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Configuración de sesiones

@@ -31,7 +31,7 @@
                 <div class="row">
                     {% for notificacion in notificaciones %}
                         <div class="col-12 mb-3">
-                            <div class="card {% if notificacion.estado == 'enviado' %}border-info{% elif notificacion.estado == 'visto' %}border-warning{% else %}border-success{% endif %}">
+                            <div class="card {% if notificacion.leida %}border-success{% else %}border-info{% endif %}">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-10">
@@ -46,13 +46,11 @@
                                                     <i class="fas fa-info-circle text-info me-2"></i>
                                                 {% endif %}
                                                 {{ notificacion.titulo }}
-                                                
-                                                {% if notificacion.estado == 'enviado' %}
-                                                    <span class="badge bg-info ms-2">Nueva</span>
-                                                {% elif notificacion.estado == 'visto' %}
-                                                    <span class="badge bg-warning ms-2">Vista</span>
-                                                {% else %}
+
+                                                {% if notificacion.leida %}
                                                     <span class="badge bg-success ms-2">Leída</span>
+                                                {% else %}
+                                                    <span class="badge bg-info ms-2">Nueva</span>
                                                 {% endif %}
                                             </h5>
                                             <p class="card-text text-muted mb-1">
@@ -68,7 +66,7 @@
                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-eye"></i> Ver
                                             </a>
-                                            {% if notificacion.estado != 'leido' %}
+                                            {% if notificacion.leida == False %}
                                                 <button type="button" 
                                                         class="btn btn-outline-success btn-sm ms-1 marcar-leida"
                                                         data-notificacion-id="{{ notificacion.id }}">
@@ -83,7 +81,6 @@
                     {% endfor %}
                 </div>
 
-                <!-- Paginación -->
                 {% if notificaciones.has_other_pages %}
                     <nav aria-label="Paginación de notificaciones">
                         <ul class="pagination justify-content-center">
@@ -130,7 +127,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Manejar click en botones "marcar como leída"
     document.querySelectorAll('.marcar-leida').forEach(function(btn) {
         btn.addEventListener('click', function() {
             const notificacionId = this.getAttribute('data-notificacion-id');
@@ -145,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    location.reload(); // Recargar para actualizar estado
+                    location.reload();
                 } else {
                     alert('Error al marcar como leída: ' + data.message);
                 }
@@ -159,3 +155,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
+

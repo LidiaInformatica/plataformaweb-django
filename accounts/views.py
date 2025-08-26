@@ -9,27 +9,43 @@ from core.models import PerfilUsuario
 def login_view(request):
     """Vista de inicio de sesión"""
     if request.user.is_authenticated:
-        return redirect('core:dashboard')
-    
+        user = request.user
+        # Redirección según grupo si ya está logueado
+        if user.groups.filter(name='Apoderado').exists():
+            return redirect('core:vista_apoderado')
+        elif user.groups.filter(name__in=['Presidenta', 'Tesorera', 'Secretaria']).exists():
+            return redirect('core:dashboard_directiva')
+        elif user.is_superuser:
+            return redirect('core:dashboard')
+        else:
+            return redirect('accounts:perfil')
+
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            
+
             if user is not None:
                 login(request, user)
                 messages.success(request, f'¡Bienvenido, {user.get_full_name()}!')
-                
-                # Si es superusuario, ir directo al dashboard
-                if user.is_superuser:
-                    return redirect('core:dashboard')
-                
+
                 # Verificar si tiene perfil
                 try:
                     perfil = PerfilUsuario.objects.get(usuario=user)
-                    return redirect('core:dashboard')
+
+                    # Redirección según grupo
+                    if user.groups.filter(name='Apoderado').exists():
+                        return redirect('core:vista_apoderado')
+                    elif user.groups.filter(name__in=['Presidenta', 'Tesorera', 'Secretaria']).exists():
+                        return redirect('core:dashboard_directiva')
+                    elif user.is_superuser:
+                        return redirect('core:dashboard')
+                    else:
+                        messages.warning(request, 'Su cuenta no tiene un grupo válido asignado. Contacte al administrador.')
+                        return redirect('accounts:perfil')
+
                 except PerfilUsuario.DoesNotExist:
                     messages.warning(request, 'Debe completar su perfil para continuar.')
                     return redirect('accounts:crear_perfil')
@@ -37,7 +53,7 @@ def login_view(request):
                 messages.error(request, 'RUT o contraseña incorrectos.')
     else:
         form = CustomAuthenticationForm()
-    
+
     return render(request, 'accounts/login.html', {'form': form})
 
 def register_view(request):

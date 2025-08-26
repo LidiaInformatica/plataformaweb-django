@@ -166,19 +166,19 @@ def registrar_pago(request):
                         )
                     
                     notificacion = Notificacion.objects.create(
-                        usuario_registra=usuario_registra,
-                        apoderado_nombre=f'{apoderado.nombre} {apoderado.apellido_paterno} {apoderado.apellido_materno}',
-                        apoderado_email=apoderado.email,
-                        apoderado_telefono=apoderado.telefono,
-                        apoderado_rut=apoderado.rut,
-                        titulo=f'Notificación de Pago - {estudiante.nombre} {estudiante.apellido_paterno}',
-                        mensaje=f'Estimado/a {apoderado.nombre} {apoderado.apellido_paterno}, {mensaje_notif} El pago fue realizado mediante {metodo}. Fecha: {timezone.now().strftime("%d/%m/%Y %H:%M")}',
-                        tipo=tipo_notificacion,
-                        estudiante_nombre=f'{estudiante.nombre} {estudiante.apellido_paterno} {estudiante.apellido_materno}',
-                        actividad_nombre=cuota.actividad.nombre,
-                        monto=monto,
-                        metodo_pago=metodo,
-                        estado='enviada'
+                    usuario_registra=usuario_registra,
+                    apoderado_nombre=f'{apoderado.nombre} {apoderado.apellido_paterno} {apoderado.apellido_materno}',
+                    apoderado_email=apoderado.email,
+                    apoderado_telefono=apoderado.telefono,
+                    apoderado_rut=apoderado.rut,
+                    titulo=f'Notificación de Pago - {estudiante.nombre} {estudiante.apellido_paterno}',
+                    mensaje=f'Estimado/a {apoderado.nombre} {apoderado.apellido_paterno}, {mensaje_notif} El pago fue realizado mediante {metodo}. Fecha: {timezone.now().strftime("%d/%m/%Y %H:%M")}',
+                    tipo=tipo_notificacion,
+                    estudiante=estudiante,  # ✅ Aquí se vincula correctamente
+                    actividad_nombre=cuota.actividad.nombre,
+                    monto=monto,
+                    metodo_pago=metodo,
+                    estado='enviada'
                     )
                     logger.info(f"✅ Notificación creada: {notificacion.id}")
                     
