@@ -33,3 +33,26 @@ Registro de cambios técnicos del sistema escolar digital — Colegio Adventista
 -Se agregan filtros personalizados en templatetags/form_filters.py para mejorar la visualización de formularios
 -Se mejora la estética y usabilidad de vistas (base.html, lista.html, dashboard.css)
 -Se documenta cada avance en release_note_v1.2.0.md y README.md, con evidencia técnica y visual
+
+## v1.2.1 – Segmentación institucional validada (26-08-2025)
+- Validación de segmentación funcional para perfiles “admin” y “directiva” (énfasis en presidenta)
+- Acceso diferenciado a vistas protegidas según grupo institucional
+- Lectura de notificaciones automáticas habilitada para presidenta
+- Corrección de trazabilidad en modelo `Notificacion` (`estudiante` como ForeignKey)
+- Eliminación de notificaciones huérfanas y ajuste de lógica `leida=True`
+- Estado RF-03 y RF-06: validados; RF-09: avance parcial con presidenta funcional
+- Documentado en release_note_v1.2.1.md con evidencia técnica
+
+## v2025.08.26 – Consolidación y preparación de auditoría de Apoderado (26-08-2025)
+- Diagnóstico y documentación de acceso a `python manage.py shell` en Windows y Docker
+- Procedimiento estandarizado para iniciar contenedor detenido y acceder a shell interna
+- Auditoría de datos: diferenciados datos reales vs. de prueba; marcaje de temporales/fixtures para eliminación controlada
+- Dashboard institucional: ajustes de tamaño, reordenamiento de bloques e incremento de prioridad de indicadores financieros
+- Notificaciones automáticas: incorporadas columnas “Estudiante” y “Fecha de envío” para trazabilidad
+- Creación de vista/dashboard para perfil de Apoderado (acceso aún bloqueado por falta de vínculo `Apoderado → User`)
+- Pendientes: 
+  - Confirmar OneToOne/FK y migrar datos con log
+  - Aplicar segmentación por rol en rutas/menús y ocultación de componentes fuera de alcance
+  - Verificar acceso restringido de Apoderado autenticado
+  - Eliminar datos temporales con evidencia
+
