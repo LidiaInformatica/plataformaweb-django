@@ -224,73 +224,50 @@ def dashboard_directiva(request):
     return render(request, 'core/dashboard_directiva.html', context)
 
 @login_required
-def vista_apoderado(request):
-    """Vista exclusiva para Apoderados"""
-    if not request.user.groups.filter(name='Apoderado').exists():
-        messages.warning(request, 'No tiene permisos para acceder al panel de apoderado.')
-        return redirect('core:dashboard')
+def dashboard_apoderado(request):
+    correo_apoderado = request.user.email
 
-    from cuotas.models import CuotaEstudiante, PagoCuota
-    from actividades.models import Actividad
-    from core.models import Notificacion
+    # Estudiante vinculado al apoderado
+    estudiante = Estudiante.objects.filter(apoderado_email=correo_apoderado).first()
 
-    hoy = timezone.now().date()
-    mes_en = hoy.strftime('%B')
-    mes_es = MESES_ES.get(mes_en, mes_en)
+    # Actividades asignadas al estudiante
+    actividades = Actividad.objects.filter(estudiantes=estudiante)
 
-    cuotas_apoderado = CuotaEstudiante.objects.filter(apoderado_email=request.user.email)
-    pagos_apoderado = PagoCuota.objects.filter(cuota__apoderado_email=request.user.email)
+    # Cuotas segmentadas por apoderado
+    cuotas = CuotaEstudiante.objects.filter(apoderado_email=correo_apoderado)
+    cuotas_pagadas = cuotas.filter(estado='pagado')
+    cuotas_pendientes = cuotas.filter(estado='pendiente')
 
-    recaudacion_total = pagos_apoderado.aggregate(total=Sum('monto'))['total'] or 0
-    cuotas_pendientes = cuotas_apoderado.filter(estado='pendiente').count()
-    actividades_activas = Actividad.objects.count()
+    # Pagos realizados
+    pagos = Pago.objects.filter(cuota__apoderado_email=correo_apoderado)
+    total_pagado = pagos.aggregate(total=Sum('monto'))['total'] or 0
 
-    ultimos_pagos = pagos_apoderado.select_related('cuota__actividad').order_by('-fecha_pago')[:5]
+    # Total pendiente desde cuotas
+    total_pendiente = cuotas_pendientes.aggregate(total=Sum('monto'))['total'] or 0
 
-    pagos_formateados = []
-    for pago in ultimos_pagos:
-        pagos_formateados.append({
-            'actividad': pago.cuota.actividad.nombre,
-            'monto': pago.monto,
-            'fecha': pago.fecha_pago.date(),
-            'estado': pago.cuota.estado
-        })
-
-    notificaciones = Notificacion.objects.filter(
-        apoderado_email=request.user.email
-    ).order_by('-fecha_creacion')[:10]
-
-    total_no_leidas = notificaciones.filter(leida=False).count()
-
-    notificaciones_automaticas = []
-    for notif in notificaciones:
-        notificaciones_automaticas.append({
-            'titulo': notif.titulo,
-            'mensaje': notif.mensaje[:100] + '...' if len(notif.mensaje) > 100 else notif.mensaje,
-            'fecha_envio': notif.fecha_creacion.date(),
-            'tipo': notif.get_tipo_display(),
-            'estado': notif.estado
-        })
+    # Notificaciones dirigidas al estudiante
+    notificaciones = Notificacion.objects.filter(destinatario_rut=estudiante.rut)
 
     context = {
-        'recaudacion_total': recaudacion_total,
-        'cuotas_pendientes': cuotas_pendientes,
-        'actividades_activas': actividades_activas,
-        'ultimos_pagos': pagos_formateados,
-        'mes_actual': f"{mes_es} de {hoy.year}",
-        'notificaciones_automaticas': notificaciones_automaticas,
-        'notificaciones_no_leidas': total_no_leidas,
+        'estudiante': estudiante,
+        'actividades_asignadas': actividades,
+        'cuotas_pagadas': cuotas_pagadas.count(),
+        'cuotas_pendientes': cuotas_pendientes.count(),
+        'total_pagado': total_pagado,
+        'total_pendiente': total_pendiente,
+        'pagos_estudiante': cuotas,
+        'notificaciones_estudiante': notificaciones,
     }
-
-    return render(request, 'core/vista_apoderado.html', context)
+    return render(request, 'core/dashboard_apoderado.html', context)
 
 def redireccion_post_login(request):
     perfil = getattr(request.user, 'perfilusuario', None)
     if perfil and perfil.tipo_perfil == 'directiva':
         return redirect('core:dashboard_directiva')
     elif perfil and perfil.tipo_perfil == 'apoderado':
-        return redirect('core:vista_apoderado')
+        return redirect('core:dashboard_apoderado')
     else:
         return redirect('core:dashboard')
+
 
 

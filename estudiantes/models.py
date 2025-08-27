@@ -34,7 +34,7 @@ class Estudiante(models.Model):
         ('tutor', 'Tutor Legal'),
         ('otro', 'Otro'),
     ]
-    
+        
     rut = models.CharField(max_length=12, unique=True)
     nombre = models.CharField(max_length=100)
     apellido_paterno = models.CharField(max_length=50)

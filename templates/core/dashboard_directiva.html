@@ -12,117 +12,102 @@
 
 <!-- Tarjetas de Resumen -->
 <div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="card-title">Recaudación Total</h6>
-                        <h3 class="mb-0">${{ recaudacion_total|floatformat:0 }}</h3>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-dollar-sign fa-2x"></i>
-                    </div>
+    <div class="col-lg col-md-6 mb-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Recaudación Total</h6>
+                    <h3 class="mb-0">${{ recaudacion_total|floatformat:0 }}</h3>
                 </div>
+                <i class="fas fa-dollar-sign fa-2x"></i>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="card-title">Cuotas Pendientes</h6>
-                        <h3 class="mb-0">{{ cuotas_pendientes }}</h3>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-exclamation-triangle fa-2x"></i>
-                    </div>
+
+    <div class="col-lg col-md-6 mb-3">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Cuotas Pendientes</h6>
+                    <h3 class="mb-0">{{ cuotas_pendientes }}</h3>
                 </div>
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="card-title">Actividades Activas</h6>
-                        <h3 class="mb-0">{{ actividades_activas }}</h3>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-calendar-check fa-2x"></i>
-                    </div>
+
+    <div class="col-lg col-md-6 mb-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Actividades Activas</h6>
+                    <h3 class="mb-0">{{ actividades_activas }}</h3>
                 </div>
+                <i class="fas fa-calendar-check fa-2x"></i>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="card-title">Total Estudiantes</h6>
-                        <h3 class="mb-0">{{ total_estudiantes }}</h3>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-users fa-2x"></i>
-                    </div>
+
+    <div class="col-lg col-md-6 mb-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Total Estudiantes</h6>
+                    <h3 class="mb-0">{{ total_estudiantes }}</h3>
                 </div>
+                <i class="fas fa-users fa-2x"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg col-md-6 mb-3">
+        <div class="card bg-secondary text-white h-100">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Notificaciones</h6>
+                    <h3 class="mb-0">{{ notificaciones_no_leidas }}</h3>
+                    <small>Sin leer</small>
+                </div>
+                <i class="fas fa-bell fa-2x"></i>
+            </div>
+            <div class="card-footer bg-dark">
+                <a href="{% url 'notificaciones:lista' %}" class="text-white text-decoration-none">
+                    <i class="fas fa-eye"></i> Ver todas
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Nueva fila para notificaciones -->
-<div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card bg-secondary text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h6 class="card-title">Notificaciones</h6>
-                        <h3 class="mb-0" id="count-notificaciones">{{ notificaciones_no_leidas }}</h3>
-                        <small>Sin leer</small>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-bell fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-dark">
-                <a href="{% url 'notificaciones:lista' %}" class="text-white text-decoration-none">
-                    <i class="fas fa-eye"></i> Ver todas las notificaciones
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-9">
+<!-- Accesos Rápidos -->
+<div class="row mt-4">
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h6 class="mb-0">
-                    <i class="fas fa-tachometer-alt"></i> Accesos Rápidos del Sistema
-                </h6>
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Accesos Rápidos
+                </h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4 mb-2">
-                        <a href="{% url 'notificaciones:test' %}" class="btn btn-outline-info btn-sm w-100">
-                            <i class="fas fa-vial"></i> Probar Notificaciones
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'cuotas:registrar_pago' %}" class="btn btn-outline-success w-100">
+                            <i class="fas fa-plus me-2"></i>Registrar Pago
                         </a>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-primary btn-sm w-100">
-                            <i class="fas fa-users"></i> Gestionar Estudiantes
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-users me-2"></i>Ver Estudiantes
                         </a>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <a href="{% url 'actividades:lista' %}" class="btn btn-outline-success btn-sm w-100">
-                            <i class="fas fa-calendar"></i> Gestionar Actividades
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'actividades:lista' %}" class="btn btn-outline-info w-100">
+                            <i class="fas fa-calendar me-2"></i>Ver Actividades
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{% url 'actividades:exportar' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-download me-2"></i>Exportar Datos
                         </a>
                     </div>
                 </div>
@@ -156,7 +141,6 @@
         </div>
     </div>
 </div>
-
 <!-- Últimos Pagos Registrados (ahora primero) -->
 <div class="row mb-4">
     <div class="col-12">
@@ -264,42 +248,33 @@
         </div>
     </div>
 </div>
-
-<!-- Accesos Rápidos -->
-<div class="row mt-4">
-    <div class="col-12">
+<div class="col-md-9">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-bolt me-2"></i>Accesos Rápidos
-                </h5>
+                <h6 class="mb-0">
+                    <i class="fas fa-tachometer-alt"></i> Accesos Rápidos del Sistema
+                </h6>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3 mb-2">
-                        <a href="{% url 'cuotas:registrar_pago' %}" class="btn btn-outline-success w-100">
-                            <i class="fas fa-plus me-2"></i>Registrar Pago
+                    <div class="col-md-4 mb-2">
+                        <a href="{% url 'notificaciones:test' %}" class="btn btn-outline-info btn-sm w-100">
+                            <i class="fas fa-vial"></i> Probar Notificaciones
                         </a>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-users me-2"></i>Ver Estudiantes
+                    <div class="col-md-4 mb-2">
+                        <a href="{% url 'estudiantes:lista' %}" class="btn btn-outline-primary btn-sm w-100">
+                            <i class="fas fa-users"></i> Gestionar Estudiantes
                         </a>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <a href="{% url 'actividades:lista' %}" class="btn btn-outline-info w-100">
-                            <i class="fas fa-calendar me-2"></i>Ver Actividades
-                        </a>
-                    </div>
-                    <div class="col-md-3 mb-2">
-                        <a href="{% url 'actividades:exportar' %}" class="btn btn-outline-secondary w-100">
-                            <i class="fas fa-download me-2"></i>Exportar Datos
+                    <div class="col-md-4 mb-2">
+                        <a href="{% url 'actividades:lista' %}" class="btn btn-outline-success btn-sm w-100">
+                            <i class="fas fa-calendar"></i> Gestionar Actividades
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 

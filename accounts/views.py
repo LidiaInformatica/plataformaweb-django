@@ -12,7 +12,7 @@ def login_view(request):
         user = request.user
         # Redirección según grupo si ya está logueado
         if user.groups.filter(name='Apoderado').exists():
-            return redirect('core:vista_apoderado')
+            return redirect('core:dashboard_apoderado')
         elif user.groups.filter(name__in=['Presidenta', 'Tesorera', 'Secretaria']).exists():
             return redirect('core:dashboard_directiva')
         elif user.is_superuser:
