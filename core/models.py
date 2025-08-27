@@ -29,7 +29,10 @@ class PerfilUsuario(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.usuario.get_full_name()} - {self.get_tipo_perfil_display()}"
+        nombre = self.usuario.get_full_name() if self.usuario else "Sin usuario"
+        tipo = self.get_tipo_perfil_display() if self.tipo_perfil else "Sin tipo"
+        return f"{nombre} - {tipo}"
+
 
 class Mensaje(models.Model):
     TIPO_MENSAJE_CHOICES = [

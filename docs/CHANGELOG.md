@@ -55,4 +55,14 @@ Registro de cambios técnicos del sistema escolar digital — Colegio Adventista
   - Aplicar segmentación por rol en rutas/menús y ocultación de componentes fuera de alcance
   - Verificar acceso restringido de Apoderado autenticado
   - Eliminar datos temporales con evidencia
+  
+v1.2.2 – Validación reproducible con Docker y Pytest (27-08-2025)
+Se configura docker-compose.yml para ejecución automatizada del sistema escolar digital
+Se valida el entorno Docker con python manage.py runserver en contenedor activo
+Se ejecuta pytest en entorno dockerizado, confirmando test funcional test_user_str
+Se registra evidencia técnica en docs/tests_validacion.md y log reproducible en docs/evidencias/est_model_perfilusuario.log
+Se documenta la configuración del entorno en docs/docker_setup.md
+Se consolida commit técnico con trazabilidad completa (v1.2.2)
+Estado RF-07 y RF-08: validados en entorno reproducible
+Pendiente: integración de pytest como servicio en docker-compose.yml para automatización continua
 

@@ -2,6 +2,9 @@ Django==4.2.7
 Pillow==10.1.0
 python-decouple==3.8
 django-extensions==4.1
+pytest
+pytest-django
+
 
 
 
