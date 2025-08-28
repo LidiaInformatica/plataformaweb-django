@@ -9,7 +9,7 @@ django.setup()
 from django.contrib.auth.models import User
 from estudiantes.models import Apoderado
 
-print("🔍 CREANDO APODERADOS FALTANTES...")
+print(" CREANDO APODERADOS FALTANTES...")
 
 # Crear apoderados para cada usuario
 usuarios_apoderado = ['apoderado1', 'apoderado2', 'apoderado3']
@@ -30,10 +30,10 @@ for username in usuarios_apoderado:
             }
         )
         if created:
-            print(f"✅ Apoderado creado para {username}")
+            print(f" Apoderado creado para {username}")
         else:
-            print(f"👍 Apoderado ya existe para {username}")
+            print(f" Apoderado ya existe para {username}")
     except User.DoesNotExist:
-        print(f"❌ Usuario {username} no existe")
+        print(f" Usuario {username} no existe")
 
-print("✅ Proceso completado!")
+print(" Proceso completado!")

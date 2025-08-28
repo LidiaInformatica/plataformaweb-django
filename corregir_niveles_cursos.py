@@ -44,18 +44,18 @@ def corregir_niveles_cursos():
                 curso.save()
                 cursos_corregidos += 1
     
-    print(f"\n✅ {cursos_corregidos} cursos corregidos")
+    print(f"\n {cursos_corregidos} cursos corregidos")
     
     # Mostrar estado final
     print("\n=== Estado final de cursos ===")
     for curso in Curso.objects.all().order_by('id'):
-        print(f"✓ {curso.nombre} - Nivel: {curso.nivel}")
+        print(f" {curso.nombre} - Nivel: {curso.nivel}")
 
 def main():
     try:
         corregir_niveles_cursos()
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         import traceback
         traceback.print_exc()
 

@@ -98,10 +98,10 @@ def main():
         crear_tipos_actividad()
         crear_cursos()
         
-        print(f"\n✅ Inicialización completada:")
+        print(f"\n Inicialización completada:")
         print(f"   - Tipos de actividad: {TipoActividad.objects.count()}")
         print(f"   - Cursos disponibles: {Curso.objects.count()}")
-        print(f"\n🎯 Ya puede crear actividades en: http://127.0.0.1:8000/actividades/crear/")
+        print(f"\n Ya puede crear actividades en: http://127.0.0.1:8000/actividades/crear/")
         
     except Exception as e:
         print(f"❌ Error: {str(e)}")

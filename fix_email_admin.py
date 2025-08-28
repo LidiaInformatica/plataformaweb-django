@@ -15,9 +15,9 @@ try:
     user.save()
     
     print(f"Email cambiado a: {user.email}")
-    print("✅ Conflicto de email resuelto")
+    print(" Conflicto de email resuelto")
     
 except User.DoesNotExist:
-    print("❌ Usuario 'Lidia' no encontrado")
+    print(" Usuario 'Lidia' no encontrado")
 
-print("\n🎯 Ahora el login de apoderado2 debería funcionar sin conflictos")
+print("\n Ahora el login de apoderado2 debería funcionar sin conflictos")

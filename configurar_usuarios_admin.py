@@ -69,9 +69,9 @@ def configurar_usuarios_admin():
     for grupo_nombre in grupos_requeridos:
         grupo, creado = Group.objects.get_or_create(name=grupo_nombre)
         if creado:
-            print(f"✅ Grupo creado: {grupo_nombre}")
+            print(f" Grupo creado: {grupo_nombre}")
         else:
-            print(f"👍 Grupo ya existe: {grupo_nombre}")
+            print(f" Grupo ya existe: {grupo_nombre}")
     
     print("\n" + "=" * 60)
     
@@ -81,14 +81,14 @@ def configurar_usuarios_admin():
         
         try:
             usuario = User.objects.get(username=username)
-            print(f"\n👤 Configurando usuario: {username}")
+            print(f"\n Configurando usuario: {username}")
             
             # Configurar superusuario si es necesario
             if config.get('is_superuser'):
                 usuario.is_superuser = True
                 usuario.is_staff = True
                 usuario.save()
-                print(f"   🔑 Configurado como superusuario")
+                print(f"    Configurado como superusuario")
             
             # Crear o actualizar perfil
             perfil, creado = PerfilUsuario.objects.get_or_create(
@@ -107,9 +107,9 @@ def configurar_usuarios_admin():
                 if 'cargo_directiva' in config:
                     perfil.cargo_directiva = config['cargo_directiva']
                 perfil.save()
-                print(f"   🔄 Perfil actualizado: {config['tipo_perfil']}")
+                print(f"    Perfil actualizado: {config['tipo_perfil']}")
             else:
-                print(f"   ✅ Perfil creado: {config['tipo_perfil']}")
+                print(f"    Perfil creado: {config['tipo_perfil']}")
             
             # Configurar grupos
             usuario.groups.clear()  # Limpiar grupos existentes
@@ -118,17 +118,17 @@ def configurar_usuarios_admin():
                 usuario.groups.add(grupo)
                 print(f"   📋 Agregado al grupo: {grupo_nombre}")
             
-            print(f"   ✅ Usuario {username} configurado correctamente")
+            print(f"    Usuario {username} configurado correctamente")
             
         except User.DoesNotExist:
-            print(f"   ❌ Usuario {username} no encontrado en la base de datos")
+            print(f"    Usuario {username} no encontrado en la base de datos")
     
     print("\n" + "=" * 60)
-    print("📊 CONFIGURACIÓN COMPLETADA")
+    print(" CONFIGURACIÓN COMPLETADA")
     print("=" * 60)
     
     # Mostrar estado final
-    print("\n📋 ESTADO FINAL DE USUARIOS:")
+    print("\n ESTADO FINAL DE USUARIOS:")
     for config in configuraciones:
         try:
             usuario = User.objects.get(username=config['username'])
@@ -141,17 +141,17 @@ def configurar_usuarios_admin():
                 cargo = ""
             
             grupos = ", ".join([g.name for g in usuario.groups.all()])
-            print(f"👤 {config['username']:12} | {tipo_display:15}{cargo:15} | Grupos: {grupos}")
+            print(f" {config['username']:12} | {tipo_display:15}{cargo:15} | Grupos: {grupos}")
         except User.DoesNotExist:
-            print(f"❌ {config['username']:12} | NO EXISTE")
+            print(f" {config['username']:12} | NO EXISTE")
 
 if __name__ == '__main__':
     try:
         configurar_usuarios_admin()
-        print("\n🎉 Configuración completada exitosamente!")
+        print("\n Configuración completada exitosamente!")
         print("📝 Todos los usuarios deberían poder acceder a sus dashboards correspondientes.")
     except Exception as e:
-        print(f"❌ Error durante la configuración: {e}")
+        print(f" Error durante la configuración: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

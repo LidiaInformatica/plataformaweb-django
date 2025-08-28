@@ -23,9 +23,9 @@ def main():
         actividad1 = Actividad.objects.get(nombre="Matrícula 2026")
         actividad2 = Actividad.objects.get(nombre="Materiales Escolares Agosto")
         actividad3 = Actividad.objects.get(nombre="Excursión Pedagógica")
-        print("✓ Actividades encontradas")
+        print(" Actividades encontradas")
     except Actividad.DoesNotExist as e:
-        print(f"❌ Error: No se encontró una actividad: {e}")
+        print(f" Error: No se encontró una actividad: {e}")
         return
     
     # Obtener todos los estudiantes
@@ -33,7 +33,7 @@ def main():
     print(f"✓ Total estudiantes: {estudiantes.count()}")
     
     if estudiantes.count() == 0:
-        print("❌ No hay estudiantes en la base de datos")
+        print(" No hay estudiantes en la base de datos")
         return
     
     # Crear cuotas pendientes para cada estudiante
@@ -49,9 +49,9 @@ def main():
                 estado='pendiente',
                 fecha_vencimiento=date(2025, 8, 31)
             )
-            print(f"✓ Cuota matrícula creada para {estudiante.nombre}")
+            print(f" Cuota matrícula creada para {estudiante.nombre}")
         else:
-            print(f"⚠ Cuota matrícula ya existe para {estudiante.nombre}")
+            print(f" Cuota matrícula ya existe para {estudiante.nombre}")
     
     # Crear cuotas de materiales escolares para todos
     print("\n--- Creando cuotas de materiales escolares ---")
@@ -65,9 +65,9 @@ def main():
                 estado='pendiente',
                 fecha_vencimiento=date(2025, 8, 25)
             )
-            print(f"✓ Cuota materiales creada para {estudiante.nombre}")
+            print(f" Cuota materiales creada para {estudiante.nombre}")
         else:
-            print(f"⚠ Cuota materiales ya existe para {estudiante.nombre}")
+            print(f" Cuota materiales ya existe para {estudiante.nombre}")
     
     # Crear cuotas de excursión solo para algunos estudiantes (para variar)
     print("\n--- Creando cuotas de excursión ---")
@@ -82,9 +82,9 @@ def main():
                 estado='pendiente',
                 fecha_vencimiento=date(2025, 8, 20)
             )
-            print(f"✓ Cuota excursión creada para {estudiante.nombre}")
+            print(f" Cuota excursión creada para {estudiante.nombre}")
         else:
-            print(f"⚠ Cuota excursión ya existe para {estudiante.nombre}")
+            print(f" Cuota excursión ya existe para {estudiante.nombre}")
     
     # Verificar cuántas cuotas pendientes tenemos
     print("\n=== RESUMEN ===")
@@ -97,7 +97,7 @@ def main():
         total_monto = sum(c.monto_total for c in CuotaEstudiante.objects.filter(actividad=actividad, estado='pendiente'))
         print(f"• {actividad.nombre}: {count} cuotas pendientes (${total_monto:,.0f} total)")
     
-    print("\n✅ Proceso completado. Ya puedes probar el registro de pagos y las notificaciones.")
+    print("\n Proceso completado. Ya puedes probar el registro de pagos y las notificaciones.")
 
 if __name__ == "__main__":
     main()

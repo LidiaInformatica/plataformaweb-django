@@ -14,7 +14,7 @@ django.setup()
 from estudiantes.models import Estudiante, Curso
 
 def main():
-    print("🔧 Corrigiendo curso de Benjamín Santa Cruz...")
+    print(" Corrigiendo curso de Benjamín Santa Cruz...")
     
     try:
         # Buscar a Benjamín
@@ -24,11 +24,11 @@ def main():
         ).first()
         
         if not benjamin:
-            print("❌ No se encontró a Benjamín Santa Cruz")
+            print(" No se encontró a Benjamín Santa Cruz")
             return
             
-        print(f"✅ Benjamín encontrado: {benjamin.nombre} {benjamin.apellido_paterno}")
-        print(f"📚 Curso actual: {benjamin.curso}")
+        print(f" Benjamín encontrado: {benjamin.nombre} {benjamin.apellido_paterno}")
+        print(f" Curso actual: {benjamin.curso}")
         
         # Buscar o crear 4° Medio
         curso_4to_medio, created = Curso.objects.get_or_create(
@@ -40,22 +40,22 @@ def main():
         )
         
         if created:
-            print(f"📝 Curso '4° Medio' creado")
+            print(f" Curso '4° Medio' creado")
         else:
-            print(f"✅ Curso '4° Medio' ya existe")
+            print(f" Curso '4° Medio' ya existe")
             
         # Actualizar curso de Benjamín
         curso_anterior = benjamin.curso
         benjamin.curso = curso_4to_medio
         benjamin.save()
         
-        print(f"🎯 Curso actualizado:")
+        print(f" Curso actualizado:")
         print(f"   Anterior: {curso_anterior}")
         print(f"   Nuevo: {benjamin.curso}")
-        print(f"✅ ¡Benjamín ahora está en 4° Medio!")
+        print(f" ¡Benjamín ahora está en 4° Medio!")
         
     except Exception as e:
-        print(f"💥 Error: {e}")
+        print(f" Error: {e}")
         import traceback
         traceback.print_exc()
 

@@ -69,14 +69,14 @@ def calcular_dv(rut):
 
 def crear_estudiantes():
     """Crear 25 estudiantes para 4° Medio"""
-    print("🏫 Creando 25 estudiantes para 4° Medio...")
+    print(" Creando 25 estudiantes para 4° Medio...")
     
     # Obtener el curso de 4° Medio
     try:
         curso_4medio = Curso.objects.get(nombre="4° Medio")
-        print(f"✅ Curso encontrado: {curso_4medio.nombre}")
+        print(f" Curso encontrado: {curso_4medio.nombre}")
     except Curso.DoesNotExist:
-        print("❌ Error: No se encontró el curso '4° Medio'")
+        print(" Error: No se encontró el curso '4° Medio'")
         return
     
     estudiantes_creados = 0
@@ -108,7 +108,7 @@ def crear_estudiantes():
             
             if creado_apo:
                 apoderados_creados += 1
-                print(f"  👨‍👩‍👧‍👦 Apoderado creado: {apoderado.nombre} {apoderado.apellido_paterno}")
+                print(f" Apoderado creado: {apoderado.nombre} {apoderado.apellido_paterno}")
             
             # Crear el estudiante
             estudiante, creado_est = Estudiante.objects.get_or_create(
@@ -127,17 +127,17 @@ def crear_estudiantes():
             
             if creado_est:
                 estudiantes_creados += 1
-                print(f"  🎓 Estudiante creado: {estudiante.nombre} {estudiante.apellido_paterno} (RUT: {rut_estudiante})")
+                print(f"   Estudiante creado: {estudiante.nombre} {estudiante.apellido_paterno} (RUT: {rut_estudiante})")
             else:
-                print(f"  ⚠️  Estudiante ya existe: {rut_estudiante}")
+                print(f"    Estudiante ya existe: {rut_estudiante}")
                 
         except Exception as e:
-            print(f"  ❌ Error creando estudiante {nombre_est}: {str(e)}")
+            print(f" Error creando estudiante {nombre_est}: {str(e)}")
     
-    print(f"\n🎉 Proceso completado:")
-    print(f"  📊 Estudiantes creados: {estudiantes_creados}")
-    print(f"  👨‍👩‍👧‍👦 Apoderados creados: {apoderados_creados}")
-    print(f"  📚 Total estudiantes en 4° Medio: {Estudiante.objects.filter(curso=curso_4medio).count()}")
+    print(f"\n Proceso completado:")
+    print(f"   Estudiantes creados: {estudiantes_creados}")
+    print(f"   Apoderados creados: {apoderados_creados}")
+    print(f"   Total estudiantes en 4° Medio: {Estudiante.objects.filter(curso=curso_4medio).count()}")
 
 if __name__ == "__main__":
     crear_estudiantes()

@@ -18,7 +18,7 @@ from estudiantes.models import Apoderado
 def crear_apoderados():
     """Crea registros Apoderado para usuarios apoderado1, apoderado2, apoderado3"""
     
-    print("🏗️  CREANDO REGISTROS APODERADO")
+    print("  CREANDO REGISTROS APODERADO")
     print("=" * 60)
     
     usuarios_apoderado = [
@@ -59,7 +59,7 @@ def crear_apoderados():
         try:
             # Buscar el usuario
             usuario = User.objects.get(username=datos['username'])
-            print(f"\n👤 Procesando usuario: {datos['username']}")
+            print(f"\n Procesando usuario: {datos['username']}")
             
             # Verificar si ya tiene apoderado
             apoderado, creado = Apoderado.objects.get_or_create(
@@ -76,7 +76,7 @@ def crear_apoderados():
             )
             
             if creado:
-                print(f"   ✅ Apoderado creado: {apoderado.nombre_completo()}")
+                print(f" Apoderado creado: {apoderado.nombre_completo()}")
                 creados += 1
             else:
                 # Actualizar datos si ya existe
@@ -87,24 +87,24 @@ def crear_apoderados():
                 apoderado.email = usuario.email
                 apoderado.direccion = datos['direccion']
                 apoderado.save()
-                print(f"   🔄 Apoderado actualizado: {apoderado.nombre_completo()}")
+                print(f"    Apoderado actualizado: {apoderado.nombre_completo()}")
                 actualizados += 1
                 
         except User.DoesNotExist:
-            print(f"   ❌ Usuario {datos['username']} no encontrado")
+            print(f"    Usuario {datos['username']} no encontrado")
             errores += 1
         except Exception as e:
-            print(f"   ❌ Error procesando {datos['username']}: {e}")
+            print(f"    Error procesando {datos['username']}: {e}")
             errores += 1
     
     print("\n" + "=" * 60)
-    print("📊 RESUMEN:")
-    print(f"✅ Apoderados creados: {creados}")
-    print(f"🔄 Apoderados actualizados: {actualizados}")
-    print(f"❌ Errores: {errores}")
+    print(" RESUMEN:")
+    print(f" Apoderados creados: {creados}")
+    print(f" Apoderados actualizados: {actualizados}")
+    print(f" Errores: {errores}")
     
     # Mostrar estado final
-    print("\n📋 ESTADO FINAL DE APODERADOS:")
+    print("\n ESTADO FINAL DE APODERADOS:")
     print("-" * 40)
     
     for datos in usuarios_apoderado:
@@ -112,11 +112,11 @@ def crear_apoderados():
             usuario = User.objects.get(username=datos['username'])
             try:
                 apoderado = Apoderado.objects.get(usuario=usuario)
-                print(f"✅ {usuario.username:12} | {apoderado.nombre_completo():25} | {apoderado.email}")
+                print(f" {usuario.username:12} | {apoderado.nombre_completo():25} | {apoderado.email}")
             except Apoderado.DoesNotExist:
-                print(f"❌ {usuario.username:12} | SIN APODERADO")
+                print(f" {usuario.username:12} | SIN APODERADO")
         except User.DoesNotExist:
-            print(f"❌ {datos['username']:12} | USUARIO NO EXISTE")
+            print(f" {datos['username']:12} | USUARIO NO EXISTE")
 
 if __name__ == '__main__':
     try:
@@ -125,7 +125,7 @@ if __name__ == '__main__':
         print("📝 Los usuarios apoderado1, apoderado2, apoderado3 ahora tienen registros Apoderado.")
         print("📝 Esto debería resolver el error 'Apoderado matching query does not exist'.")
     except Exception as e:
-        print(f"❌ Error durante el proceso: {e}")
+        print(f" Error durante el proceso: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
