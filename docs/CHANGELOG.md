@@ -78,4 +78,27 @@ Pendiente: integración de pytest como servicio en docker-compose.yml para autom
 - Incluye correcciones de redirección y datos reales
 - Validada en entorno dockerizado
 
+## Cierre funcional de segmentación institucional
 
+Versión validada con login funcional para los tres perfiles institucionales:
+
+- `administrador` → dashboard completo
+- `directiva` → dashboard institucional con cargo validado
+- `apoderado` → dashboard personalizado con hijos, cuotas y actividades
+
+### Correcciones clave:
+- Eliminación de datos ficticios en vistas
+- Redirección unificada vía `redireccion_post_login()`
+- Uso exclusivo de `PerfilUsuario` como sistema de segmentación
+- Resolución de conflicto por email duplicado entre admin y apoderado
+- Validación de múltiples hijos por apoderado con `.filter()` en lugar de `.get()`
+
+### Scripts de verificación:
+- `verificar_segmentacion.py` → confirma integridad y segmentación funcional
+- `sincronizar_perfiles_usuarios.py` → asegura consistencia entre usuarios y perfiles
+
+## Pendientes:
+- Ajustes internos en vistas específicas
+- Validaciones adicionales por cargo y vínculo institucional
+
+## Esta versión marca el cierre funcional de la segmentación por perfil institucional para defensa de título.
