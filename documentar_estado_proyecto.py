@@ -12,7 +12,7 @@ def generar_resumen_proyecto():
     """
     
     print("="*60)
-    print("📋 REGISTRO DE DOCUMENTACIÓN DEL PROYECTO")
+    print(" REGISTRO DE DOCUMENTACIÓN DEL PROYECTO")
     print("="*60)
     print(f"Fecha de generación: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
     print()
@@ -73,73 +73,73 @@ def generar_resumen_proyecto():
     }
     
     # Mostrar resumen por pantalla
-    print("🎯 PROYECTO:", estado_proyecto["nombre"])
-    print("🏫 INSTITUCIÓN:", estado_proyecto["institucion"])
-    print("📊 PROGRESO GENERAL:", estado_proyecto["progreso_general"])
-    print("✅ ESTADO:", estado_proyecto["estado"])
+    print(" PROYECTO:", estado_proyecto["nombre"])
+    print(" INSTITUCIÓN:", estado_proyecto["institucion"])
+    print(" PROGRESO GENERAL:", estado_proyecto["progreso_general"])
+    print(" ESTADO:", estado_proyecto["estado"])
     print()
     
-    print("🛠️ TECNOLOGÍAS:")
+    print(" TECNOLOGÍAS:")
     for key, value in estado_proyecto["tecnologias"].items():
         print(f"   • {key.replace('_', ' ').title()}: {value}")
     print()
     
-    print("✅ FUNCIONALIDADES COMPLETADAS (100%):")
+    print(" FUNCIONALIDADES COMPLETADAS (100%):")
     for func in estado_proyecto["funcionalidades_completadas"]:
         print(f"   • {func}")
     print()
     
-    print("🔄 FUNCIONALIDADES EN DESARROLLO:")
+    print(" FUNCIONALIDADES EN DESARROLLO:")
     for func in estado_proyecto["funcionalidades_en_desarrollo"]:
         print(f"   • {func}")
     print()
     
-    print("📊 ESTADÍSTICAS DEL SISTEMA:")
+    print(" ESTADÍSTICAS DEL SISTEMA:")
     for key, value in estado_proyecto["estadisticas_sistema"].items():
         print(f"   • {key.replace('_', ' ').title()}: {value}")
     print()
     
-    print("📄 ARCHIVOS DE DOCUMENTACIÓN GENERADOS:")
+    print(" ARCHIVOS DE DOCUMENTACIÓN GENERADOS:")
     for archivo in estado_proyecto["archivos_documentacion"]:
         ruta = f"c:\\plataformaweb-django\\{archivo}"
         if os.path.exists(ruta):
-            print(f"   ✅ {archivo}")
+            print(f"    {archivo}")
         else:
-            print(f"   ❌ {archivo} (no encontrado)")
+            print(f"    {archivo} (no encontrado)")
     print()
     
-    print("🚀 SCRIPTS DE AUTOMATIZACIÓN:")
+    print(" SCRIPTS DE AUTOMATIZACIÓN:")
     for script in estado_proyecto["scripts_automatizacion"]:
         ruta = f"c:\\plataformaweb-django\\{script}"
         if os.path.exists(ruta):
-            print(f"   ✅ {script}")
+            print(f"    {script}")
         else:
-            print(f"   ❌ {script} (no encontrado)")
+            print(f"    {script} (no encontrado)")
     print()
     
     # Guardar en archivo JSON para referencia
     with open('estado_proyecto.json', 'w', encoding='utf-8') as f:
         json.dump(estado_proyecto, f, indent=2, ensure_ascii=False)
     
-    print("💾 Estado del proyecto guardado en: estado_proyecto.json")
+    print(" Estado del proyecto guardado en: estado_proyecto.json")
     print()
     
     # Próximos pasos
-    print("🚀 PRÓXIMOS PASOS PARA COMPLETAR EL 13% RESTANTE:")
+    print(" PRÓXIMOS PASOS PARA COMPLETAR EL 13% RESTANTE:")
     print("   1. Implementar exportación PDF/Excel (FR-05)")
     print("   2. Completar filtros avanzados por fechas (FR-04)")
     print("   3. Finalizar permisos específicos por perfil (FR-03)")
     print("   4. Optimizar interfaz de gestión masiva (FR-09)")
     print()
     
-    print("📋 DOCUMENTACIÓN COMPLETA DISPONIBLE EN:")
+    print(" DOCUMENTACIÓN COMPLETA DISPONIBLE EN:")
     print("   • DOCUMENTACION_PROYECTO_COMPLETA.md")
     print("   • README.md")
     print("   • Este script: documentar_estado_proyecto.py")
     print()
     
     print("="*60)
-    print("✅ DOCUMENTACIÓN REGISTRADA EXITOSAMENTE")
+    print(" DOCUMENTACIÓN REGISTRADA EXITOSAMENTE")
     print("="*60)
     
     return estado_proyecto
@@ -158,20 +158,20 @@ def verificar_archivos_clave():
         "DOCUMENTACION_PROYECTO_COMPLETA.md"
     ]
     
-    print("\n🔍 VERIFICACIÓN DE ARCHIVOS CLAVE:")
+    print("\n VERIFICACIÓN DE ARCHIVOS CLAVE:")
     todos_presentes = True
     
     for archivo in archivos_clave:
         if os.path.exists(archivo):
-            print(f"   ✅ {archivo}")
+            print(f"    {archivo}")
         else:
-            print(f"   ❌ {archivo} - FALTANTE")
+            print(f"    {archivo} - FALTANTE")
             todos_presentes = False
     
     if todos_presentes:
-        print("\n✅ Todos los archivos clave están presentes")
+        print("\n Todos los archivos clave están presentes")
     else:
-        print("\n⚠️ Algunos archivos clave faltan - revisar estructura")
+        print("\n Algunos archivos clave faltan - revisar estructura")
     
     return todos_presentes
 
@@ -186,7 +186,7 @@ if __name__ == "__main__":
         # Verificar archivos
         verificar_archivos_clave()
         
-        print("\n🎯 RESUMEN EJECUTIVO:")
+        print("\n RESUMEN EJECUTIVO:")
         print(f"   • Proyecto: {estado['progreso_general']} completado")
         print(f"   • Estado: {estado['estado']}")
         print(f"   • Tecnología: {estado['tecnologias']['framework']}")
@@ -194,5 +194,5 @@ if __name__ == "__main__":
         print(f"   • Documentación: Completa y actualizada")
         
     except Exception as e:
-        print(f"❌ Error al generar documentación: {e}")
+        print(f" Error al generar documentación: {e}")
         print("Asegúrate de ejecutar desde el directorio correcto")

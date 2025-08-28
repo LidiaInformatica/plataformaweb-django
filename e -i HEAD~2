@@ -1,0 +1,31 @@
+[33m6d71443[m[33m ([m[1;36mHEAD -> [m[1;32msegmentacion-admin-directiva-validada[m[33m, [m[1;31morigin/segmentacion-admin-directiva-validada[m[33m)[m Segmentación de perfiles corregida y documentada para defensa de título - versión dockerizada
+[33mb1f3a51[m Segmentación de perfiles corregida y documentada para defensa de título - versión dockerizada
+[33mb15651b[m Segmentación validada: nuevos tests automatizados y migración de modelo Apoderado | Documentación técnica incluida
+[33mf04bc85[m Release v1.2.2 documentado: entorno Docker + pytest + evidencia técnica
+[33mf912cf4[m[33m ([m[1;33mtag: v1.2.2[m[33m)[m Validación reproducible: entorno Docker + pytest + segmentación institucional documentada
+[33m0eaea9e[m docs: mover README y CHANGELOG a carpeta docs para centralizar documentación
+[33m455cd2e[m[33m ([m[1;33mtag: v2025.08.26[m[33m)[m Release v2025.08.26: ajustes dashboard institucional, trazabilidad de notificaciones, creación dashboard Apoderado (sin segmentación), diagnóstico vínculo Apoderado↔User y guía Docker
+[33m9d46dc2[m  Eliminado backup.json no funcional, no vinculado al sistema escolar
+[33m373a2ff[m[33m ([m[1;33mtag: v1.2.1[m[33m)[m Validación de segmentación institucional (admin y directiva). Corrección de trazabilidad en notificaciones automáticas. Ajuste de vistas protegidas y dashboard segmentado.
+[33mf293adf[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m Document merge from 'avance-60porciento' to 'master'
+[33m3e1f9ee[m Resolución de conflicto en README.md — se conserva versión defendible de avance-60porciento
+[33m23ec01f[m[33m ([m[1;31morigin/avance-60porciento[m[33m)[m Actualización completa del README.md con mejoras de v1.2.0
+[33me04ba59[m Actualización de documentación técnica: README, db.sqlite3 y CHANGELOG v1.1.1
+[33ma37c096[m v1.2.0: Correcciones en módulo de notificaciones, mejoras en vistas, configuración SMTP y filtros personalizados
+[33m0069e05[m[33m ([m[1;33mtag: v1.2.0[m[33m)[m Actualización de README.md con enlace a CHANGELOG.md y ajuste en .gitignore
+[33m353bbad[m Create CHANGELOG.md
+[33mf7229e0[m[33m ([m[1;33mtag: v1.1.1[m[33m)[m Actualiza README con instrucciones reproducibles y base de datos funcional
+[33m7c8e209[m Reemplaza base de datos por versión funcional con datos reales para revisión docente
+[33m945d90f[m Agrega base de datos con datos reales para revisión docente
+[33m55c08c4[m Agrega historial de versiones al README.md
+[33m9a42fb2[m Corrige dirección de acceso local en README.md
+[33md374ff8[m[33m ([m[1;33mtag: v1.1[m[33m)[m Agrego django-extensions al requirements.txt para evitar errores en entorno dockerizado
+[33m93d9a28[m Agrego Dockerfile para dockerización reproducible del entorno escolar
+[33m0d68277[m Delete ModeloDatos_MVP_Simplificado.puml
+[33mfb9114d[m Delete ModeloDatos_MVP_PlataformaEscolar.puml
+[33m1826ff2[m Delete DOCUMENTACION_PROYECTO_TITULO.md
+[33m57510cd[m Delete DOCUMENTACION_PROYECTO_COMPLETA.md
+[33mbe8dcfb[m README completo con dockerización y trazabilidad del avance
+[33m40b0fb2[m Backup antes de unificar modelos de Notificación
+[33mb84a94a[m Update README.md
+[33m6cd179e[m[33m ([m[1;31morigin/auditoria-scripts[m[33m)[m Versión inicial

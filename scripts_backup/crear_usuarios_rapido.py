@@ -14,9 +14,9 @@ try:
     user = User.objects.get(username='admin')
     user.set_password('admin123')
     user.save()
-    print("✅ Contraseña establecida para 'admin': admin123")
+    print("Contraseña establecida para 'admin': admin123")
 except User.DoesNotExist:
-    print("❌ Usuario admin no encontrado")
+    print(" Usuario admin no encontrado")
 
 # Crear usuarios de prueba rápidos
 users_data = [
@@ -36,11 +36,11 @@ for user_data in users_data:
     if created:
         user.set_password(user_data['password'])
         user.save()
-        print(f"✅ Usuario creado: {user_data['username']} / {user_data['password']}")
+        print(f" Usuario creado: {user_data['username']} / {user_data['password']}")
     else:
-        print(f"ℹ️  Usuario ya existe: {user_data['username']}")
+        print(f"  Usuario ya existe: {user_data['username']}")
 
-print("\n🎯 CREDENCIALES LISTAS:")
+print("\n CREDENCIALES LISTAS:")
 print("Admin: admin / admin123")
 print("Test1: test1 / 123456")
 print("Test2: test2 / 123456")

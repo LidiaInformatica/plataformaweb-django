@@ -56,11 +56,11 @@ Write-Host "   COLEGIO ADVENTISTA TALCAHUANO CENTRO" -ForegroundColor Green
 Write-Host "   PROYECTO DJANGO CONFIGURADO" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "🎯 CREDENCIALES QUE FUNCIONAN:" -ForegroundColor Cyan
+Write-Host "CREDENCIALES QUE FUNCIONAN:" -ForegroundColor Cyan
 Write-Host "Usuario: colegio" -ForegroundColor White
 Write-Host "Contraseña: 123" -ForegroundColor White
 Write-Host ""
-Write-Host "🌐 ENLACES DIRECTOS:" -ForegroundColor Cyan
+Write-Host "ENLACES DIRECTOS:" -ForegroundColor Cyan
 Write-Host "Sistema Principal: http://127.0.0.1:8000" -ForegroundColor White
 Write-Host "Panel Admin: http://127.0.0.1:8000/admin" -ForegroundColor White
 Write-Host "Login: http://127.0.0.1:8000/accounts/login/" -ForegroundColor White

@@ -87,9 +87,9 @@ def crear_cursos():
             }
         )
         if created:
-            print(f"✓ Creado: {curso.nombre}")
+            print(f" Creado: {curso.nombre}")
         else:
-            print(f"- Ya existe: {curso.nombre}")
+            print(f" Ya existe: {curso.nombre}")
 
 def main():
     print("=== Inicializando datos para el módulo de actividades ===\n")
@@ -98,13 +98,13 @@ def main():
         crear_tipos_actividad()
         crear_cursos()
         
-        print(f"\n✅ Inicialización completada:")
+        print(f"\n Inicialización completada:")
         print(f"   - Tipos de actividad: {TipoActividad.objects.count()}")
         print(f"   - Cursos disponibles: {Curso.objects.count()}")
-        print(f"\n🎯 Ya puede crear actividades en: http://127.0.0.1:8000/actividades/crear/")
+        print(f"\n Ya puede crear actividades en: http://127.0.0.1:8000/actividades/crear/")
         
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         import traceback
         traceback.print_exc()
 

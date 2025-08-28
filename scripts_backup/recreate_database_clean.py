@@ -8,7 +8,7 @@ import shutil
 def recreate_database():
     """Recrear la base de datos desde cero"""
     
-    print("🗃️ RECREANDO BASE DE DATOS COMPLETA")
+    print(" RECREANDO BASE DE DATOS COMPLETA")
     print("=" * 40)
     
     # 1. Hacer backup
@@ -16,13 +16,13 @@ def recreate_database():
         timestamp = __import__('datetime').datetime.now().strftime('%Y%m%d_%H%M%S')
         backup_name = f'db_backup_{timestamp}.sqlite3'
         shutil.copy2('db.sqlite3', backup_name)
-        print(f"✅ Backup creado: {backup_name}")
+        print(f" Backup creado: {backup_name}")
         
         # Eliminar base de datos actual
         os.remove('db.sqlite3')
-        print("🗑️ Base de datos actual eliminada")
+        print(" Base de datos actual eliminada")
     
-    print("\n📋 INSTRUCCIONES:")
+    print("\n INSTRUCCIONES:")
     print("1. Ejecute: python manage.py migrate")
     print("2. Ejecute: python manage.py createsuperuser")
     print("3. Use username: admin, password: admin123")

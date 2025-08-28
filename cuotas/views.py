@@ -62,29 +62,29 @@ def lista_pagos(request):
     return render(request, 'cuotas/lista_pagos.html', context)
 
 def registrar_pago(request):
-    logger.info(f"🔥 Iniciando registrar_pago - Método: {request.method}")
+    logger.info(f" Iniciando registrar_pago - Método: {request.method}")
     
     if request.method == 'POST':
-        logger.info(f"📝 Datos POST recibidos: {dict(request.POST)}")
+        logger.info(f" Datos POST recibidos: {dict(request.POST)}")
         form = PagoCuotaForm(request.POST)
         
         if not form.is_valid():
-            logger.error(f"❌ Formulario inválido - Errores: {form.errors}")
+            logger.error(f" Formulario inválido - Errores: {form.errors}")
             messages.error(request, 'Por favor corrija los errores en el formulario.')
         else:
-            logger.info("✅ Formulario válido, procesando datos...")
+            logger.info(" Formulario válido, procesando datos...")
             try:
                 monto = form.cleaned_data['monto']
                 metodo = form.cleaned_data['metodo_pago']
                 observacion = form.cleaned_data['observacion']
                 
-                logger.info(f"💰 Datos del pago - Monto: {monto}, Método: {metodo}, Obs: {observacion}")
+                logger.info(f" Datos del pago - Monto: {monto}, Método: {metodo}, Obs: {observacion}")
                 
                 # Obtener datos del formulario
                 estudiante_id = request.POST.get('estudiante')
                 actividad_nombre = request.POST.get('actividad')
                 
-                logger.info(f"🎓 Buscando - Estudiante ID: {estudiante_id}, Actividad: {actividad_nombre}")
+                logger.info(f" Buscando - Estudiante ID: {estudiante_id}, Actividad: {actividad_nombre}")
                 
                 # Buscar el estudiante y la actividad
                 from estudiantes.models import Estudiante
@@ -92,61 +92,61 @@ def registrar_pago(request):
                 from .models import CuotaEstudiante, PagoCuota
                 
                 estudiante = Estudiante.objects.get(id=estudiante_id)
-                logger.info(f"✅ Estudiante encontrado: {estudiante}")
+                logger.info(f" Estudiante encontrado: {estudiante}")
                 
                 actividad = Actividad.objects.get(nombre=actividad_nombre)
-                logger.info(f"✅ Actividad encontrada: {actividad}")
+                logger.info(f" Actividad encontrada: {actividad}")
                 
                 cuota = CuotaEstudiante.objects.get(estudiante=estudiante, actividad=actividad)
-                logger.info(f"✅ Cuota encontrada: {cuota} - Estado: {cuota.estado}")
+                logger.info(f" Cuota encontrada: {cuota} - Estado: {cuota.estado}")
                 
             except Estudiante.DoesNotExist:
-                logger.error(f"❌ Estudiante con ID {estudiante_id} no encontrado")
+                logger.error(f" Estudiante con ID {estudiante_id} no encontrado")
                 messages.error(request, f'Estudiante con ID {estudiante_id} no encontrado.')
                 return redirect('cuotas:registrar_pago')
             except Actividad.DoesNotExist:
-                logger.error(f"❌ Actividad '{actividad_nombre}' no encontrada")
+                logger.error(f" Actividad '{actividad_nombre}' no encontrada")
                 messages.error(request, f'Actividad "{actividad_nombre}" no encontrada.')
                 return redirect('cuotas:registrar_pago')
             except CuotaEstudiante.DoesNotExist:
-                logger.error(f"❌ No se encontró cuota para {estudiante_id} y actividad '{actividad_nombre}'")
+                logger.error(f" No se encontró cuota para {estudiante_id} y actividad '{actividad_nombre}'")
                 messages.error(request, f'No se encontró una cuota para {estudiante} y la actividad "{actividad_nombre}".')
                 return redirect('cuotas:registrar_pago')
             except Exception as e:
-                logger.error(f"💥 Error inesperado al buscar datos: {e}", exc_info=True)
+                logger.error(f" Error inesperado al buscar datos: {e}", exc_info=True)
                 messages.error(request, f'Error inesperado: {e}')
                 return redirect('cuotas:registrar_pago')
                 
             # Registrar el pago
             try:
-                logger.info(f"💳 Creando pago - Cuota: {cuota.id}, Monto: {monto}")
+                logger.info(f" Creando pago - Cuota: {cuota.id}, Monto: {monto}")
                 pago = PagoCuota.objects.create(
                     cuota=cuota,
                     monto=monto,
                     metodo_pago=metodo,
                     observacion=observacion,
                 )
-                logger.info(f"✅ Pago creado: {pago.id}")
+                logger.info(f" Pago creado: {pago.id}")
                 
                 # Actualizar monto pagado y estado de la cuota
                 monto_anterior = cuota.monto_pagado
                 cuota.monto_pagado += monto
-                logger.info(f"💰 Actualizando cuota - Anterior: {monto_anterior}, Nuevo: {cuota.monto_pagado}, Total: {cuota.monto_total}")
+                logger.info(f" Actualizando cuota - Anterior: {monto_anterior}, Nuevo: {cuota.monto_pagado}, Total: {cuota.monto_total}")
                 
                 if cuota.monto_pagado >= cuota.monto_total:
                     cuota.estado = 'pagado'
                     tipo_notificacion = 'pago_confirmado'
                     mensaje_notif = f'El pago de ${monto:,.0f} para {cuota.actividad.nombre} ha sido registrado exitosamente. La cuota está completamente pagada.'
-                    logger.info("✅ Cuota completamente pagada")
+                    logger.info(" Cuota completamente pagada")
                 else:
                     cuota.estado = 'pendiente'
                     tipo_notificacion = 'pago_parcial'
                     saldo_restante = cuota.monto_total - cuota.monto_pagado
                     mensaje_notif = f'Se ha registrado un pago parcial de ${monto:,.0f} para {cuota.actividad.nombre}. Saldo pendiente: ${saldo_restante:,.0f}.'
-                    logger.info(f"⚠️ Pago parcial - Saldo restante: {saldo_restante}")
+                    logger.info(f" Pago parcial - Saldo restante: {saldo_restante}")
                 
                 cuota.save()
-                logger.info("✅ Cuota actualizada y guardada")
+                logger.info(" Cuota actualizada y guardada")
                 
                 # Crear notificación automática PARA EL APODERADO
                 try:
@@ -154,7 +154,7 @@ def registrar_pago(request):
                     from django.contrib.auth.models import User
                     
                     apoderado = estudiante.apoderado
-                    logger.info(f"👤 Creando notificación para apoderado: {apoderado.nombre} {apoderado.apellido_paterno}")
+                    logger.info(f" Creando notificación para apoderado: {apoderado.nombre} {apoderado.apellido_paterno}")
                     
                     # Obtener usuario admin o crear uno si no existe
                     if request.user.is_authenticated:
@@ -166,37 +166,37 @@ def registrar_pago(request):
                         )
                     
                     notificacion = Notificacion.objects.create(
-                        usuario_registra=usuario_registra,
-                        apoderado_nombre=f'{apoderado.nombre} {apoderado.apellido_paterno} {apoderado.apellido_materno}',
-                        apoderado_email=apoderado.email,
-                        apoderado_telefono=apoderado.telefono,
-                        apoderado_rut=apoderado.rut,
-                        titulo=f'Notificación de Pago - {estudiante.nombre} {estudiante.apellido_paterno}',
-                        mensaje=f'Estimado/a {apoderado.nombre} {apoderado.apellido_paterno}, {mensaje_notif} El pago fue realizado mediante {metodo}. Fecha: {timezone.now().strftime("%d/%m/%Y %H:%M")}',
-                        tipo=tipo_notificacion,
-                        estudiante_nombre=f'{estudiante.nombre} {estudiante.apellido_paterno} {estudiante.apellido_materno}',
-                        actividad_nombre=cuota.actividad.nombre,
-                        monto=monto,
-                        metodo_pago=metodo,
-                        estado='enviada'
+                    usuario_registra=usuario_registra,
+                    apoderado_nombre=f'{apoderado.nombre} {apoderado.apellido_paterno} {apoderado.apellido_materno}',
+                    apoderado_email=apoderado.email,
+                    apoderado_telefono=apoderado.telefono,
+                    apoderado_rut=apoderado.rut,
+                    titulo=f'Notificación de Pago - {estudiante.nombre} {estudiante.apellido_paterno}',
+                    mensaje=f'Estimado/a {apoderado.nombre} {apoderado.apellido_paterno}, {mensaje_notif} El pago fue realizado mediante {metodo}. Fecha: {timezone.now().strftime("%d/%m/%Y %H:%M")}',
+                    tipo=tipo_notificacion,
+                    estudiante=estudiante,  #  Aquí se vincula correctamente
+                    actividad_nombre=cuota.actividad.nombre,
+                    monto=monto,
+                    metodo_pago=metodo,
+                    estado='enviada'
                     )
-                    logger.info(f"✅ Notificación creada: {notificacion.id}")
+                    logger.info(f" Notificación creada: {notificacion.id}")
                     
                     messages.success(request, f'Pago de ${monto:,.0f} registrado exitosamente. Se ha enviado notificación automática.')
-                    logger.info("🎉 Proceso completado exitosamente")
+                    logger.info(" Proceso completado exitosamente")
                     return redirect('cuotas:registrar_pago')
                     
                 except Exception as e:
-                    logger.error(f"❌ Error al crear notificación: {e}", exc_info=True)
+                    logger.error(f" Error al crear notificación: {e}", exc_info=True)
                     messages.warning(request, f'Pago registrado exitosamente, pero hubo un error al enviar la notificación: {e}')
                     return redirect('cuotas:registrar_pago')
                 
             except Exception as e:
-                logger.error(f"💥 Error general al registrar el pago: {e}", exc_info=True)
+                logger.error(f" Error general al registrar el pago: {e}", exc_info=True)
                 messages.error(request, f'Error al registrar el pago: {e}')
                 return redirect('cuotas:registrar_pago')
     else:
-        logger.info("📄 Cargando formulario GET - Registrar Pago")
+        logger.info(" Cargando formulario GET - Registrar Pago")
         form = PagoCuotaForm()
     
     # Cargar datos reales desde la base de datos
@@ -204,19 +204,19 @@ def registrar_pago(request):
     from actividades.models import Actividad
     from .models import CuotaEstudiante
     
-    logger.debug("🔍 Buscando cuotas pendientes...")
+    logger.debug(" Buscando cuotas pendientes...")
     
     # Obtener solo estudiantes con cuotas pendientes
     cuotas_pendientes = CuotaEstudiante.objects.select_related('estudiante', 'actividad').filter(estado='pendiente')
     
-    logger.info(f"📊 Total cuotas pendientes encontradas: {len(cuotas_pendientes)}")
+    logger.info(f" Total cuotas pendientes encontradas: {len(cuotas_pendientes)}")
     
     estudiantes_con_deuda = []
     actividades_set = set()
     
     for cuota in cuotas_pendientes:
         saldo_pendiente = cuota.saldo_pendiente()
-        logger.debug(f"💰 {cuota.estudiante.nombre}: Saldo pendiente = ${saldo_pendiente}")
+        logger.debug(f" {cuota.estudiante.nombre}: Saldo pendiente = ${saldo_pendiente}")
         if saldo_pendiente > 0:  # Solo mostrar si realmente hay saldo pendiente
             estudiantes_con_deuda.append({
                 'id': cuota.estudiante.id,
@@ -227,8 +227,8 @@ def registrar_pago(request):
             })
             actividades_set.add((cuota.actividad.nombre, cuota.monto_total))
     
-    logger.info(f"✅ Estudiantes con deuda encontrados: {len(estudiantes_con_deuda)}")
-    logger.info(f"📚 Actividades disponibles: {len(actividades_set)}")
+    logger.info(f" Estudiantes con deuda encontrados: {len(estudiantes_con_deuda)}")
+    logger.info(f" Actividades disponibles: {len(actividades_set)}")
     
     # Remover duplicados y ordenar estudiantes
     estudiantes_con_deuda = sorted(estudiantes_con_deuda, key=lambda x: x['nombre'])

@@ -1,7 +1,7 @@
 import os
 import re
 
-# 📁 Carpetas activas (ajustá según tu estructura)
+#  Carpetas activas (ajustá según tu estructura)
 TEMPLATE_DIRS = [
     "templates",
     "templates/notificaciones",
@@ -9,7 +9,7 @@ TEMPLATE_DIRS = [
     "templates/mensajes"
 ]
 
-# 📁 Carpetas excluidas (no deberían contener templates activos)
+#  Carpetas excluidas (no deberían contener templates activos)
 EXCLUDED_DIRS = [
     "templates_backup",
     "scripts_backup",
@@ -17,19 +17,19 @@ EXCLUDED_DIRS = [
     "styles"
 ]
 
-# 📄 Archivos donde buscar renderizaciones
+#  Archivos donde buscar renderizaciones
 VIEWS_DIR = "."
 
-# 🧠 Regex para detectar render(request, 'template.html')
+#  Regex para detectar render(request, 'template.html')
 RENDER_REGEX = re.compile(r"render\s*\(\s*request\s*,\s*['\"]([^'\"]+)['\"]")
 
-# 📦 Resultados
+#  Resultados
 referenced_templates = set()
 found_templates = set()
 excluded_templates = set()
 missing_templates = set()
 
-# 🔍 Buscar templates referenciados
+#  Buscar templates referenciados
 for root, _, files in os.walk(VIEWS_DIR):
     for file in files:
         if file.endswith(".py") and "notificacion" in file.lower():
@@ -38,7 +38,7 @@ for root, _, files in os.walk(VIEWS_DIR):
                 matches = RENDER_REGEX.findall(content)
                 referenced_templates.update(matches)
 
-# 📁 Buscar templates existentes
+#  Buscar templates existentes
 for template in referenced_templates:
     found = False
     for dir in TEMPLATE_DIRS:
@@ -57,16 +57,16 @@ for template in referenced_templates:
     if not found:
         missing_templates.add(template)
 
-# 📊 Reporte
-print("\n📋 Auditoría de templates para notificaciones")
-print("✅ Encontrados en carpetas activas:")
+#  Reporte
+print("\n Auditoría de templates para notificaciones")
+print(" Encontrados en carpetas activas:")
 for t in sorted(found_templates):
     print(f"  - {t}")
 
-print("\n🚫 Encontrados en carpetas excluidas:")
+print("\n Encontrados en carpetas excluidas:")
 for t in sorted(excluded_templates):
     print(f"  - {t}")
 
-print("\n❌ No encontrados:")
+print("\n No encontrados:")
 for t in sorted(missing_templates):
     print(f"  - {t}")

@@ -12,7 +12,7 @@ def analyze_templates():
             if file.endswith('.html'):
                 html_files.append(os.path.join(root, file))
     
-    print("📁 TEMPLATES ENCONTRADOS:")
+    print(" TEMPLATES ENCONTRADOS:")
     for template in sorted(html_files):
         print(f"  - {template}")
     
@@ -69,7 +69,7 @@ def analyze_templates():
         except Exception as e:
             print(f"Error leyendo {template}: {e}")
     
-    print("\n🔗 DEPENDENCIAS ENTRE TEMPLATES:")
+    print("\n DEPENDENCIAS ENTRE TEMPLATES:")
     for dep in sorted(template_dependencies):
         print(f"  - {dep}")
     
@@ -95,14 +95,14 @@ def analyze_templates():
         if not is_used:
             unused_templates.append(template)
     
-    print("\n🗑️ TEMPLATES APARENTEMENTE NO UTILIZADOS:")
+    print("\n TEMPLATES APARENTEMENTE NO UTILIZADOS:")
     if unused_templates:
         for template in unused_templates:
-            print(f"  ❌ {template}")
+            print(f"   {template}")
     else:
-        print("  ✅ Todos los templates están siendo utilizados")
+        print("   Todos los templates están siendo utilizados")
     
-    print(f"\n📊 RESUMEN:")
+    print(f"\n RESUMEN:")
     print(f"  - Total templates: {len(html_files)}")
     print(f"  - Referencias encontradas: {len(all_references)}")
     print(f"  - Templates no utilizados: {len(unused_templates)}")
@@ -110,23 +110,23 @@ def analyze_templates():
     return unused_templates, all_references
 
 if __name__ == "__main__":
-    print("🧹 ANALIZADOR DE TEMPLATES NO UTILIZADOS")
+    print(" ANALIZADOR DE TEMPLATES NO UTILIZADOS")
     print("=" * 50)
     
     unused, references = analyze_templates()
     
     if unused:
-        print("\n⚠️  ¿DESEAS ELIMINAR ESTOS ARCHIVOS? (s/n)")
+        print("\n  ¿DESEAS ELIMINAR ESTOS ARCHIVOS? (s/n)")
         respuesta = input().lower()
         if respuesta == 's':
-            print("\n🗑️ ELIMINANDO ARCHIVOS...")
+            print("\n ELIMINANDO ARCHIVOS...")
             for template in unused:
                 try:
                     os.remove(template)
-                    print(f"✅ Eliminado: {template}")
+                    print(f" Eliminado: {template}")
                 except Exception as e:
-                    print(f"❌ Error eliminando {template}: {e}")
+                    print(f" Error eliminando {template}: {e}")
         else:
-            print("🚫 Operación cancelada")
+            print(" Operación cancelada")
     else:
-        print("\n🎉 ¡No hay templates para limpiar!")
+        print("\n ¡No hay templates para limpiar!")

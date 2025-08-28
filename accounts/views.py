@@ -6,38 +6,35 @@ from django.urls import reverse
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, PerfilUsuarioForm, CambiarPasswordForm
 from core.models import PerfilUsuario
 
+from django.conf import settings
+
 def login_view(request):
     """Vista de inicio de sesión"""
     if request.user.is_authenticated:
-        return redirect('core:dashboard')
-    
+        return redirect(settings.LOGIN_REDIRECT_URL)
+
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            
+
             if user is not None:
                 login(request, user)
                 messages.success(request, f'¡Bienvenido, {user.get_full_name()}!')
-                
-                # Si es superusuario, ir directo al dashboard
-                if user.is_superuser:
-                    return redirect('core:dashboard')
-                
-                # Verificar si tiene perfil
-                try:
-                    perfil = PerfilUsuario.objects.get(usuario=user)
-                    return redirect('core:dashboard')
-                except PerfilUsuario.DoesNotExist:
+
+                perfil_existe = PerfilUsuario.objects.filter(usuario=user).exists()
+                if not perfil_existe:
                     messages.warning(request, 'Debe completar su perfil para continuar.')
                     return redirect('accounts:crear_perfil')
+
+                return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 messages.error(request, 'RUT o contraseña incorrectos.')
     else:
         form = CustomAuthenticationForm()
-    
+
     return render(request, 'accounts/login.html', {'form': form})
 
 def register_view(request):

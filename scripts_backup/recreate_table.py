@@ -43,7 +43,7 @@ def recreate_table():
             """, record)
         
         conn.commit()
-        print("✅ Tabla recreada exitosamente")
+        print(" Tabla recreada exitosamente")
         
         # Verificar
         cursor.execute("PRAGMA table_info(core_perfilusuario)")

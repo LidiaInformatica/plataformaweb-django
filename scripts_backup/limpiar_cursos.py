@@ -48,11 +48,11 @@ def limpiar_cursos_duplicados():
             for curso in cursos_a_eliminar:
                 print(f"Eliminando: {curso.nombre}")
                 curso.delete()
-            print(f"✅ {len(cursos_a_eliminar)} cursos eliminados")
+            print(f" {len(cursos_a_eliminar)} cursos eliminados")
         else:
-            print("❌ Operación cancelada")
+            print(" Operación cancelada")
     else:
-        print("✅ No hay cursos duplicados para eliminar")
+        print(" No hay cursos duplicados para eliminar")
     
     # Mostrar estado final
     cursos_finales = Curso.objects.all().order_by('nombre')
@@ -60,13 +60,13 @@ def limpiar_cursos_duplicados():
     print(f"Total de cursos: {cursos_finales.count()}")
     print("\n--- Cursos válidos ---")
     for curso in cursos_finales:
-        print(f"✓ {curso.nombre} ({curso.nivel})")
+        print(f" {curso.nombre} ({curso.nivel})")
 
 def main():
     try:
         limpiar_cursos_duplicados()
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         import traceback
         traceback.print_exc()
 

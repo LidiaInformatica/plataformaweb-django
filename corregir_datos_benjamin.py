@@ -34,7 +34,7 @@ def main():
             estudiante.vinculo_apoderado = "hijo"
             estudiante.save()
             
-            print("\n✅ Datos del estudiante corregidos:")
+            print("\n Datos del estudiante corregidos:")
             print(f"   Nombre: {estudiante.nombre} {estudiante.apellido_paterno} {estudiante.apellido_materno}")
             print(f"   RUT: {estudiante.rut}")
             print(f"   Fecha nacimiento: {estudiante.fecha_nacimiento}")
@@ -42,7 +42,7 @@ def main():
             print(f"   Apoderado: {estudiante.apoderado.nombre} {estudiante.apoderado.apellido_paterno}")
             
         else:
-            print("❌ No se encontró el estudiante con RUT 175403221")
+            print(" No se encontró el estudiante con RUT 175403221")
             
             # Mostrar todos los estudiantes para debug
             print("\n--- Todos los estudiantes en la base de datos ---")
@@ -50,7 +50,7 @@ def main():
                 print(f"ID: {est.id}, RUT: {est.rut}, Nombre: {est.nombre} {est.apellido_paterno}")
             
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         import traceback
         traceback.print_exc()
 
