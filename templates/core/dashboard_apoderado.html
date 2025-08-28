@@ -62,7 +62,7 @@
       <tbody>
         {% for pago in pagos_estudiante %}
         <tr>
-          <td>{{ pago.actividad.nombre }}</td>
+          <td>{{ pago.cuota.actividad.nombre }}</td>
           <td>${{ pago.monto|floatformat:0 }}</td>
           <td>{{ pago.fecha|date:"d/m/Y" }}</td>
           <td>

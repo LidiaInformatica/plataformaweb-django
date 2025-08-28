@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Curso(models.Model):
     nombre = models.CharField(max_length=50)
@@ -9,6 +10,7 @@ class Curso(models.Model):
         return f"{self.nombre} - {self.año}"
 
 class Apoderado(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     rut = models.CharField(max_length=12, unique=True)
     nombre = models.CharField(max_length=100)
     apellido_paterno = models.CharField(max_length=50)

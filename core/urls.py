@@ -10,5 +10,7 @@ urlpatterns = [
     path('mensajes/', views.bandeja_mensajes, name='bandeja_mensajes'),
     path('dashboard-directiva/', views.dashboard_directiva, name='dashboard_directiva'),
     path('redireccion/', views.redireccion_post_login, name='redireccion_post_login'),
-    path('dashboard/apoderado/', dashboard_apoderado, name='dashboard_apoderado')
+    path('dashboard/apoderado/', views.dashboard_apoderado, name='dashboard_apoderado'),
+    path('error/apoderado/', views.error_apoderado, name='error_apoderado')
+
 ]

@@ -6,19 +6,12 @@ from django.urls import reverse
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, PerfilUsuarioForm, CambiarPasswordForm
 from core.models import PerfilUsuario
 
+from django.conf import settings
+
 def login_view(request):
     """Vista de inicio de sesión"""
     if request.user.is_authenticated:
-        user = request.user
-        # Redirección según grupo si ya está logueado
-        if user.groups.filter(name='Apoderado').exists():
-            return redirect('core:dashboard_apoderado')
-        elif user.groups.filter(name__in=['Presidenta', 'Tesorera', 'Secretaria']).exists():
-            return redirect('core:dashboard_directiva')
-        elif user.is_superuser:
-            return redirect('core:dashboard')
-        else:
-            return redirect('accounts:perfil')
+        return redirect(settings.LOGIN_REDIRECT_URL)
 
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
@@ -31,24 +24,12 @@ def login_view(request):
                 login(request, user)
                 messages.success(request, f'¡Bienvenido, {user.get_full_name()}!')
 
-                # Verificar si tiene perfil
-                try:
-                    perfil = PerfilUsuario.objects.get(usuario=user)
-
-                    # Redirección según grupo
-                    if user.groups.filter(name='Apoderado').exists():
-                        return redirect('core:vista_apoderado')
-                    elif user.groups.filter(name__in=['Presidenta', 'Tesorera', 'Secretaria']).exists():
-                        return redirect('core:dashboard_directiva')
-                    elif user.is_superuser:
-                        return redirect('core:dashboard')
-                    else:
-                        messages.warning(request, 'Su cuenta no tiene un grupo válido asignado. Contacte al administrador.')
-                        return redirect('accounts:perfil')
-
-                except PerfilUsuario.DoesNotExist:
+                perfil_existe = PerfilUsuario.objects.filter(usuario=user).exists()
+                if not perfil_existe:
                     messages.warning(request, 'Debe completar su perfil para continuar.')
                     return redirect('accounts:crear_perfil')
+
+                return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 messages.error(request, 'RUT o contraseña incorrectos.')
     else:

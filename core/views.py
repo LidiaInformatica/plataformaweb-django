@@ -7,9 +7,13 @@ from django.contrib import messages
 
 from cuotas.models import PagoCuota as Pago
 from actividades.models import Actividad
-from estudiantes.models import Estudiante
-from core.models import Notificacion
+from core.models import Notificacion, PerfilUsuario
 from cuotas.models import CuotaEstudiante
+from estudiantes.models import Apoderado, Estudiante
+from cuotas.models import PagoCuota
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 # Traducción manual de meses al español
 MESES_ES = {
@@ -71,16 +75,30 @@ def dashboard(request):
 
 @login_required
 def perfil_usuario(request):
-    # Simular perfil de usuario (RF-03: Acceder al sistema con sesión segmentada)
-    perfil_simulado = {
-        'nombre': 'Juan Pérez González',
-        'tipo': 'Apoderado',  # o 'Directiva'
-        'rut': '12.345.678-9',
-        'telefono': '+56 9 8765 4321',
-        'email': 'juan.perez@email.com'
-    }
+    """Vista del perfil de usuario con datos reales"""
+    try:
+        perfil = PerfilUsuario.objects.get(usuario=request.user)
+        perfil_data = {
+            'nombre': request.user.get_full_name(),
+            'tipo': perfil.get_tipo_perfil_display(),
+            'rut': perfil.rut,
+            'telefono': perfil.telefono,
+            'email': request.user.email,
+            'cargo_directiva': perfil.get_cargo_directiva_display() if perfil.cargo_directiva else None
+        }
+    except PerfilUsuario.DoesNotExist:
+        # Si no tiene perfil, mostrar datos básicos del usuario
+        perfil_data = {
+            'nombre': request.user.get_full_name(),
+            'tipo': 'Sin perfil configurado',
+            'rut': request.user.username,
+            'telefono': '',
+            'email': request.user.email,
+            'cargo_directiva': None
+        }
+        messages.warning(request, 'Su perfil no está completamente configurado.')
     
-    return render(request, 'core/perfil.html', {'perfil': perfil_simulado})
+    return render(request, 'core/perfil.html', {'perfil': perfil_data})
 
 @login_required
 def bandeja_mensajes(request):
@@ -179,9 +197,13 @@ def bandeja_mensajes(request):
 @login_required
 def dashboard_directiva(request):
     # Validación de perfil
-    perfil = getattr(request.user, 'perfilusuario', None)
-    if not perfil or perfil.tipo_perfil != 'directiva':
-        messages.warning(request, 'Acceso restringido al panel de la directiva.')
+    try:
+        perfil = PerfilUsuario.objects.get(usuario=request.user)
+        if perfil.tipo_perfil != 'directiva':
+            messages.warning(request, 'Acceso restringido al panel de la directiva.')
+            return redirect('core:dashboard')
+    except PerfilUsuario.DoesNotExist:
+        messages.warning(request, 'No tiene un perfil configurado. Acceso denegado.')
         return redirect('core:dashboard')
 
     # Datos financieros
@@ -225,49 +247,105 @@ def dashboard_directiva(request):
 
 @login_required
 def dashboard_apoderado(request):
-    correo_apoderado = request.user.email
+    """Dashboard para apoderados - Versión simplificada y segura"""
+    usuario = request.user
+    correo_apoderado = usuario.email
+    
+    # Buscar apoderados por email (manejo seguro de múltiples resultados)
+    apoderados_usuario = Apoderado.objects.filter(email=correo_apoderado)
+    
+    # Buscar estudiantes relacionados con estos apoderados
+    estudiantes_relacionados = Estudiante.objects.filter(apoderado__in=apoderados_usuario)
+    
+    if estudiantes_relacionados.exists():
+        # Usuario con hijos/estudiantes reales
+        todos_los_estudiantes = list(estudiantes_relacionados)
+        
+        # Información básica de los hijos
+        info_hijos = []
+        for estudiante in todos_los_estudiantes:
+            info_hijos.append({
+                'nombre_completo': f"{estudiante.nombre} {estudiante.apellido_paterno} {estudiante.apellido_materno}",
+                'rut': estudiante.rut,
+                'curso': str(estudiante.curso),
+                'vinculo': estudiante.get_vinculo_apoderado_display() if hasattr(estudiante, 'get_vinculo_apoderado_display') else estudiante.vinculo_apoderado
+            })
+        
+        # Datos básicos de cuotas y pagos
+        cuotas = CuotaEstudiante.objects.filter(apoderado_email=correo_apoderado)
+        cuotas_pagadas = cuotas.filter(estado='pagado')
+        cuotas_pendientes = cuotas.filter(estado='pendiente')
+        
+        total_pagado = sum(pago.monto for pago in Pago.objects.filter(cuota__apoderado_email=correo_apoderado))
+        total_pendiente = sum(cuota.monto for cuota in cuotas_pendientes)
+        
+        # Notificaciones
+        notificaciones = Notificacion.objects.filter(apoderado_email=correo_apoderado)
+        
+        context = {
+            'usuario': usuario,
+            'apoderados': apoderados_usuario,
+            'estudiantes': todos_los_estudiantes,
+            'info_hijos': info_hijos,
+            'total_hijos': len(todos_los_estudiantes),
+            'cuotas_pagadas': cuotas_pagadas.count(),
+            'cuotas_pendientes': cuotas_pendientes.count(),
+            'total_pagado': total_pagado,
+            'total_pendiente': total_pendiente,
+            'notificaciones_estudiante': notificaciones,
+            'tiene_datos_completos': True,
+            'mensaje_bienvenida': f'Bienvenida {usuario.get_full_name()}, apoderada de {len(todos_los_estudiantes)} estudiante(s)'
+        }
+    else:
+        # Usuario sin estudiantes - dashboard básico
+        context = {
+            'usuario': usuario,
+            'apoderados': None,
+            'estudiantes': [],
+            'info_hijos': [],
+            'total_hijos': 0,
+            'cuotas_pagadas': 0,
+            'cuotas_pendientes': 0,
+            'total_pagado': 0,
+            'total_pendiente': 0,
+            'notificaciones_estudiante': [],
+            'tiene_datos_completos': False,
+            'mensaje_bienvenida': f'Bienvenido(a) {usuario.get_full_name()}',
+            'mensaje_info': 'No se encontraron estudiantes asociados a su perfil de apoderado.'
+        }
 
-    # Estudiante vinculado al apoderado
-    estudiante = Estudiante.objects.filter(apoderado_email=correo_apoderado).first()
+    return render(request, 'core/dashboard_apoderado.html', context)
 
-    # Actividades asignadas al estudiante
-    actividades = Actividad.objects.filter(estudiantes=estudiante)
-
-    # Cuotas segmentadas por apoderado
-    cuotas = CuotaEstudiante.objects.filter(apoderado_email=correo_apoderado)
-    cuotas_pagadas = cuotas.filter(estado='pagado')
-    cuotas_pendientes = cuotas.filter(estado='pendiente')
-
-    # Pagos realizados
-    pagos = Pago.objects.filter(cuota__apoderado_email=correo_apoderado)
-    total_pagado = pagos.aggregate(total=Sum('monto'))['total'] or 0
-
-    # Total pendiente desde cuotas
-    total_pendiente = cuotas_pendientes.aggregate(total=Sum('monto'))['total'] or 0
-
-    # Notificaciones dirigidas al estudiante
-    notificaciones = Notificacion.objects.filter(destinatario_rut=estudiante.rut)
-
-    context = {
-        'estudiante': estudiante,
-        'actividades_asignadas': actividades,
-        'cuotas_pagadas': cuotas_pagadas.count(),
-        'cuotas_pendientes': cuotas_pendientes.count(),
-        'total_pagado': total_pagado,
-        'total_pendiente': total_pendiente,
-        'pagos_estudiante': cuotas,
-        'notificaciones_estudiante': notificaciones,
-    }
     return render(request, 'core/dashboard_apoderado.html', context)
 
 def redireccion_post_login(request):
-    perfil = getattr(request.user, 'perfilusuario', None)
-    if perfil and perfil.tipo_perfil == 'directiva':
-        return redirect('core:dashboard_directiva')
-    elif perfil and perfil.tipo_perfil == 'apoderado':
-        return redirect('core:dashboard_apoderado')
-    else:
-        return redirect('core:dashboard')
+    """Redirección inteligente basada en el perfil del usuario"""
+    try:
+        perfil = PerfilUsuario.objects.get(usuario=request.user)
+        
+        # Redirigir según tipo de perfil
+        if perfil.tipo_perfil == 'directiva':
+            messages.info(request, f'Bienvenido al panel de directiva.')
+            return redirect('core:dashboard_directiva')
+        elif perfil.tipo_perfil == 'apoderado':
+            messages.info(request, f'Bienvenido al panel de apoderados.')
+            return redirect('core:dashboard_apoderado')
+        elif perfil.tipo_perfil == 'administrador':
+            messages.info(request, f'Bienvenido al panel de administración.')
+            return redirect('core:dashboard')
+        else:
+            messages.warning(request, f'Tipo de perfil no reconocido: {perfil.tipo_perfil}')
+            return redirect('core:dashboard')
+            
+    except PerfilUsuario.DoesNotExist:
+        # Si no tiene perfil, verificar si es superusuario
+        if request.user.is_superuser:
+            messages.info(request, 'Bienvenido, administrador.')
+            return redirect('core:dashboard')
+        else:
+            messages.warning(request, 'Su perfil no está configurado correctamente. Contacte al administrador.')
+            return redirect('accounts:crear_perfil')
 
 
-
+def error_apoderado(request):
+    return render(request, 'error_apoderado.html', {'mensaje': 'No se encontró el perfil Apoderado asociado.'})
