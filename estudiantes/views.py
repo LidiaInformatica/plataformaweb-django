@@ -42,12 +42,12 @@ def lista_estudiantes(request):
 @login_required
 def crear_estudiante(request):
     """Vista para crear un nuevo estudiante"""
-    logger.debug("🔥 Accediendo a formulario de creación de estudiante")
+    logger.debug(" Accediendo a formulario de creación de estudiante")
     
     if request.method == 'POST':
-        logger.debug(f"📝 Datos POST recibidos: {dict(request.POST)}")
+        logger.debug(f" Datos POST recibidos: {dict(request.POST)}")
 
-        # 1️⃣ Buscar o crear el apoderado ANTES de validar estudiante
+        #  Buscar o crear el apoderado ANTES de validar estudiante
         rut_apoderado = request.POST.get('apoderado-rut')
         apoderado_existente = None
         apoderado = None
@@ -56,15 +56,15 @@ def crear_estudiante(request):
             try:
                 apoderado_existente = Apoderado.objects.get(rut=rut_apoderado)
                 apoderado = apoderado_existente
-                logger.info(f"✅ Apoderado existente encontrado: {apoderado.nombre} (RUT: {rut_apoderado})")
+                logger.info(f" Apoderado existente encontrado: {apoderado.nombre} (RUT: {rut_apoderado})")
             except Apoderado.DoesNotExist:
-                logger.info(f"🆕 No existe apoderado con RUT {rut_apoderado}, creando uno nuevo desde datos POST")
+                logger.info(f" No existe apoderado con RUT {rut_apoderado}, creando uno nuevo desde datos POST")
                 apoderado_form_temp = ApoderadoForm(request.POST, prefix='apoderado')
                 if apoderado_form_temp.is_valid():
                     apoderado = apoderado_form_temp.save()
-                    logger.debug(f"🆕 Nuevo apoderado creado: {apoderado.nombre}")
+                    logger.debug(f" Nuevo apoderado creado: {apoderado.nombre}")
                 else:
-                    logger.error(f"❌ Formulario de apoderado inválido: {apoderado_form_temp.errors}")
+                    logger.error(f" Formulario de apoderado inválido: {apoderado_form_temp.errors}")
                     messages.error(request, 'Por favor corrija los errores en los datos del apoderado.')
                     return render(request, 'estudiantes/form.html', {
                         'estudiante_form': EstudianteForm(prefix='estudiante'),
@@ -72,47 +72,47 @@ def crear_estudiante(request):
                         'titulo': 'Nuevo Estudiante'
                     })
 
-        # 2️⃣ Clonar POST e inyectar el ID del apoderado para que EstudianteForm lo reciba
+        #  Clonar POST e inyectar el ID del apoderado para que EstudianteForm lo reciba
         post_modificado = request.POST.copy()
         if apoderado:
             post_modificado[f'estudiante-apoderado'] = apoderado.id
 
-        # 3️⃣ Crear formularios con prefijo
+        #  Crear formularios con prefijo
         estudiante_form = EstudianteForm(post_modificado, prefix='estudiante')
         apoderado_form = ApoderadoForm(request.POST, prefix='apoderado')
 
-        logger.debug(f"📋 Formulario estudiante válido: {estudiante_form.is_valid()}")
+        logger.debug(f" Formulario estudiante válido: {estudiante_form.is_valid()}")
 
         if estudiante_form.is_valid():
-            logger.debug("✅ Formulario de estudiante válido")
+            logger.debug(" Formulario de estudiante válido")
             try:
                 with transaction.atomic():
                     estudiante = estudiante_form.save(commit=False)
                     estudiante.apoderado = apoderado
                     estudiante.save()
 
-                    logger.debug(f"✅ Estudiante creado: {estudiante.nombre} - Apoderado: {apoderado.nombre}")
+                    logger.debug(f" Estudiante creado: {estudiante.nombre} - Apoderado: {apoderado.nombre}")
                     
                     total_hijos = Estudiante.objects.filter(apoderado=apoderado).count()
                     
                     if apoderado_existente:
-                        messages.success(request, f'✅ {estudiante.nombre} registrado como hijo #{total_hijos} de {apoderado.nombre}')
-                        logger.info(f"🎉 Hijo #{total_hijos} agregado a {apoderado.nombre}")
+                        messages.success(request, f' {estudiante.nombre} registrado como hijo #{total_hijos} de {apoderado.nombre}')
+                        logger.info(f" Hijo #{total_hijos} agregado a {apoderado.nombre}")
                     else:
-                        messages.success(request, f'✅ Estudiante {estudiante.nombre} y apoderado {apoderado.nombre} creados exitosamente')
-                        logger.info(f"🎉 Nuevo estudiante y apoderado creados")
+                        messages.success(request, f' Estudiante {estudiante.nombre} y apoderado {apoderado.nombre} creados exitosamente')
+                        logger.info(f" Nuevo estudiante y apoderado creados")
                     
                     return redirect('estudiantes:lista')
                     
             except Exception as e:
-                logger.error(f"💥 Error al crear estudiante: {str(e)}", exc_info=True)
+                logger.error(f" Error al crear estudiante: {str(e)}", exc_info=True)
                 messages.error(request, f'Error al crear el estudiante: {str(e)}')
         else:
-            logger.error("❌ Formulario de estudiante inválido")
+            logger.error(" Formulario de estudiante inválido")
             logger.error(f"Errores estudiante: {estudiante_form.errors}")
             
     else:
-        logger.info("📄 Cargando formulario GET")
+        logger.info(" Cargando formulario GET")
         estudiante_form = EstudianteForm(prefix='estudiante')
         apoderado_form = ApoderadoForm(prefix='apoderado')
     
@@ -154,14 +154,14 @@ def buscar_apoderado_ajax(request):
                     ],
                     'total_hijos': hijos.count()
                 }
-                logger.info(f"✅ Apoderado encontrado: {apoderado.nombre} con {hijos.count()} hijo(s)")
+                logger.info(f" Apoderado encontrado: {apoderado.nombre} con {hijos.count()} hijo(s)")
                 
             except Apoderado.DoesNotExist:
                 data = {
                     'encontrado': False,
                     'mensaje': 'No se encontró apoderado con este RUT'
                 }
-                logger.info(f"🔍 No se encontró apoderado con RUT: {rut}")
+                logger.info(f" No se encontró apoderado con RUT: {rut}")
                 
         else:
             data = {

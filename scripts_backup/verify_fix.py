@@ -60,10 +60,10 @@ with open('test_results.txt', 'w', encoding='utf-8') as f:
         f.write(f"  {key}: {value}\n")
     
     if db_result.get('cargo_directiva_exists') and django_result.get('django_model_works'):
-        f.write("\n✅ TODO FUNCIONANDO CORRECTAMENTE\n")
+        f.write("\n TODO FUNCIONANDO CORRECTAMENTE\n")
         f.write("El servidor debería iniciarse sin errores.\n")
     else:
-        f.write("\n❌ PROBLEMAS DETECTADOS\n")
+        f.write("\n PROBLEMAS DETECTADOS\n")
         f.write("Revise los errores arriba.\n")
 
 print("Resultados guardados en test_results.txt")

@@ -8,19 +8,19 @@ from core.models import PerfilUsuario
 
 print("=== DATOS REALES EN LA BASE DE DATOS ===")
 
-print("\n👥 USUARIOS:")
+print("\n USUARIOS:")
 for user in User.objects.all():
     print(f"{user.username} | {user.get_full_name()} | {user.email}")
 
-print("\n👤 APODERADOS:")
+print("\n APODERADOS:")
 for apoderado in Apoderado.objects.all():
     print(f"RUT: {apoderado.rut} | {apoderado.nombre_completo()} | Email: {apoderado.email}")
 
-print("\n👶 ESTUDIANTES:")
+print("\n ESTUDIANTES:")
 for estudiante in Estudiante.objects.all():
     print(f"RUT: {estudiante.rut} | {estudiante.nombre} {estudiante.apellido_paterno} | Apoderado RUT: {estudiante.apoderado.rut}")
 
-print("\n🔍 CONFLICTO DE EMAILS:")
+print("\n CONFLICTO DE EMAILS:")
 email_problema = "lidia.inostroza18@gmail.com"
 apoderados_conflicto = Apoderado.objects.filter(email=email_problema)
 print(f"Apoderados con email {email_problema}: {apoderados_conflicto.count()}")

@@ -104,7 +104,7 @@ def main():
         print(f"\n Ya puede crear actividades en: http://127.0.0.1:8000/actividades/crear/")
         
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         import traceback
         traceback.print_exc()
 

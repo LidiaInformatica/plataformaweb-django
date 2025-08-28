@@ -72,16 +72,16 @@ def crear_actividad(request):
                     actividad = form.save()
                     logger.info(f"Nueva actividad creada: {actividad.nombre}")
                     
-                    # 🚀 ENVIAR NOTIFICACIÓN AUTOMÁTICA POR EMAIL
+                    #  ENVIAR NOTIFICACIÓN AUTOMÁTICA POR EMAIL
                     try:
                         notificacion_enviada = ServicioNotificaciones.enviar_notificacion_nueva_actividad(actividad)
                         if notificacion_enviada:
-                            messages.success(request, f'✅ Actividad "{actividad.nombre}" creada exitosamente. Notificación enviada por email.')
+                            messages.success(request, f' Actividad "{actividad.nombre}" creada exitosamente. Notificación enviada por email.')
                         else:
-                            messages.warning(request, f'✅ Actividad "{actividad.nombre}" creada exitosamente. ⚠️ Error al enviar notificación por email.')
+                            messages.warning(request, f' Actividad "{actividad.nombre}" creada exitosamente. ⚠️ Error al enviar notificación por email.')
                     except Exception as e:
                         logger.error(f"Error al enviar notificación: {str(e)}")
-                        messages.success(request, f'✅ Actividad "{actividad.nombre}" creada exitosamente. ⚠️ Notificación no enviada.')
+                        messages.success(request, f' Actividad "{actividad.nombre}" creada exitosamente. ⚠️ Notificación no enviada.')
                     
                     return redirect('actividades:lista')
             except Exception as e:

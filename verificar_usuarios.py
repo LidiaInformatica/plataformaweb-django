@@ -15,23 +15,23 @@ print(f"\nTotal usuarios: {usuarios.count()}")
 print("\n=== VERIFICANDO APODERADO2 ===")
 try:
     user = User.objects.get(username='apoderado2')
-    print(f"✅ Usuario encontrado: {user.username}")
+    print(f" Usuario encontrado: {user.username}")
     print(f"Email: {user.email}")
     print(f"Nombre completo: {user.get_full_name()}")
     print(f"Activo: {user.is_active}")
     
     # Probar contraseña
     if user.check_password('Lidi0354'):
-        print("✅ Contraseña Lidi0354 es CORRECTA")
+        print(" Contraseña Lidi0354 es CORRECTA")
     else:
-        print("❌ Contraseña Lidi0354 es INCORRECTA")
-        print("🔧 Configurando contraseña...")
+        print(" Contraseña Lidi0354 es INCORRECTA")
+        print(" Configurando contraseña...")
         user.set_password('Lidi0354')
         user.save()
-        print("✅ Contraseña configurada a Lidi0354")
+        print(" Contraseña configurada a Lidi0354")
         
 except User.DoesNotExist:
-    print("❌ Usuario apoderado2 NO EXISTE")
+    print(" Usuario apoderado2 NO EXISTE")
     print("Usuarios existentes:")
     for u in User.objects.all():
         print(f"  - {u.username}")

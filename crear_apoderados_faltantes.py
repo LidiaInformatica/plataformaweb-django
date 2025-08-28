@@ -121,9 +121,9 @@ def crear_apoderados():
 if __name__ == '__main__':
     try:
         crear_apoderados()
-        print("\n🎉 Proceso completado!")
-        print("📝 Los usuarios apoderado1, apoderado2, apoderado3 ahora tienen registros Apoderado.")
-        print("📝 Esto debería resolver el error 'Apoderado matching query does not exist'.")
+        print("\n Proceso completado!")
+        print(" Los usuarios apoderado1, apoderado2, apoderado3 ahora tienen registros Apoderado.")
+        print(" Esto debería resolver el error 'Apoderado matching query does not exist'.")
     except Exception as e:
         print(f" Error durante el proceso: {e}")
         import traceback

@@ -33,7 +33,7 @@ def main():
             apoderado.apellido_materno = "Yañez"
             apoderado.rut = "17540322-1"  # RUT de la mamá
             apoderado.save()
-            print("✓ Datos del apoderado (mamá) actualizados")
+            print(" Datos del apoderado (mamá) actualizados")
             
             # Actualizar datos del estudiante (el hijo)
             estudiante_incorrecto.nombre = "Benjamin Ezequiel"
@@ -43,18 +43,18 @@ def main():
             estudiante_incorrecto.fecha_nacimiento = date(2007, 8, 31)
             estudiante_incorrecto.vinculo_apoderado = "hijo"
             estudiante_incorrecto.save()
-            print("✓ Datos del estudiante (hijo) actualizados")
+            print(" Datos del estudiante (hijo) actualizados")
             
-            print(f"\n✅ Corrección completada:")
+            print(f"\n Corrección completada:")
             print(f"   Estudiante: {estudiante_incorrecto.nombre} {estudiante_incorrecto.apellido_paterno}")
             print(f"   Apoderado: {apoderado.nombre} {apoderado.apellido_paterno}")
             print(f"   Relación: {estudiante_incorrecto.get_vinculo_apoderado_display()}")
             
         else:
-            print("❌ No se encontró el estudiante a corregir")
+            print(" No se encontró el estudiante a corregir")
             
     except Exception as e:
-        print(f"❌ Error al corregir datos: {str(e)}")
+        print(f" Error al corregir datos: {str(e)}")
 
 if __name__ == "__main__":
     main()

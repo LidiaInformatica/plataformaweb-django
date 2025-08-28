@@ -32,17 +32,17 @@ def apply_migration():
                     ALTER TABLE core_perfilusuario 
                     ADD COLUMN cargo_directiva VARCHAR(20) DEFAULT NULL
                 """)
-                print("✅ Columna añadida")
+                print(" Columna añadida")
             else:
-                print("✅ Columna ya existe")
+                print(" Columna ya existe")
             
             # 3. Marcar migración como aplicada
             recorder = MigrationRecorder(connection)
             if not recorder.migration_qs.filter(app='core', name='0002_add_cargo_directiva').exists():
                 recorder.record_applied('core', '0002_add_cargo_directiva')
-                print("✅ Migración marcada como aplicada")
+                print(" Migración marcada como aplicada")
             else:
-                print("✅ Migración ya estaba marcada")
+                print(" Migración ya estaba marcada")
             
             # 4. Verificar que todo está OK
             cursor.execute("PRAGMA table_info(core_perfilusuario)")
@@ -50,21 +50,21 @@ def apply_migration():
             print(f"Columnas finales: {final_columns}")
             
             if 'cargo_directiva' in final_columns:
-                print("🎉 ÉXITO: La columna cargo_directiva está disponible")
+                print(" ÉXITO: La columna cargo_directiva está disponible")
                 return True
             else:
-                print("❌ ERROR: La columna no se añadió correctamente")
+                print(" ERROR: La columna no se añadió correctamente")
                 return False
                 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f" Error: {e}")
         return False
 
 if __name__ == "__main__":
     if apply_migration():
-        print("\n✅ MIGRACIÓN APLICADA EXITOSAMENTE")
+        print("\n MIGRACIÓN APLICADA EXITOSAMENTE")
         print("El servidor ya debería funcionar correctamente")
         print("Ejecute: python manage.py runserver")
     else:
-        print("\n❌ ERROR AL APLICAR LA MIGRACIÓN")
+        print("\n ERROR AL APLICAR LA MIGRACIÓN")
         sys.exit(1)

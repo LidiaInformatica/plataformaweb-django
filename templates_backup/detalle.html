@@ -113,7 +113,8 @@
                         {% if notificacion.estado != 'leido' %}
                             <button type="button" 
                                     class="btn btn-success btn-sm"
-                                    onclick="marcarComoLeida({{ notificacion.id }})">
+                                    id="marcar-como-leida-btn"
+                                    data-notificacion-id="{{ notificacion.id }}">
                                 <i class="fas fa-check"></i> Marcar como Leída
                             </button>
                         {% endif %}
@@ -123,7 +124,6 @@
         </div>
     </div>
 </div>
-
 <script>
 function marcarComoLeida(notificacionId) {
     fetch(`/notificaciones/${notificacionId}/marcar_leida/`, {
@@ -146,5 +146,16 @@ function marcarComoLeida(notificacionId) {
         alert('Error de conexión');
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('marcar-como-leida-btn');
+    if (btn) {
+        btn.addEventListener('click', function() {
+            var notificacionId = this.getAttribute('data-notificacion-id');
+            marcarComoLeida(notificacionId);
+        });
+    }
+});
+</script>
 </script>
 {% endblock %}

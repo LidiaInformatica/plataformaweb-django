@@ -44,7 +44,7 @@ for root, dirs, files in os.walk(TEMPLATES_DIR):
                 candidatos.append(rel_path)
 
 # Mostrar candidatos
-print("\n📋 Templates candidatos a respaldo:")
+print("\n Templates candidatos a respaldo:")
 for c in candidatos:
     print(f" - {c}")
 
@@ -55,7 +55,7 @@ if confirmar == "s":
         origen = os.path.join(TEMPLATES_DIR, c)
         destino = os.path.join(BACKUP_DIR, os.path.basename(c))
         os.rename(origen, destino)
-    print(f"\n✅ Archivos movidos a {BACKUP_DIR}")
+    print(f"\n Archivos movidos a {BACKUP_DIR}")
 else:
-    print("\n❌ No se movió ningún archivo.")
+    print("\n No se movió ningún archivo.")
 # Fin del script

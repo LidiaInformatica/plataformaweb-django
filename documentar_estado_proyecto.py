@@ -108,7 +108,7 @@ def generar_resumen_proyecto():
             print(f"    {archivo} (no encontrado)")
     print()
     
-    print("🚀 SCRIPTS DE AUTOMATIZACIÓN:")
+    print(" SCRIPTS DE AUTOMATIZACIÓN:")
     for script in estado_proyecto["scripts_automatizacion"]:
         ruta = f"c:\\plataformaweb-django\\{script}"
         if os.path.exists(ruta):
@@ -132,7 +132,7 @@ def generar_resumen_proyecto():
     print("   4. Optimizar interfaz de gestión masiva (FR-09)")
     print()
     
-    print("📋 DOCUMENTACIÓN COMPLETA DISPONIBLE EN:")
+    print(" DOCUMENTACIÓN COMPLETA DISPONIBLE EN:")
     print("   • DOCUMENTACION_PROYECTO_COMPLETA.md")
     print("   • README.md")
     print("   • Este script: documentar_estado_proyecto.py")

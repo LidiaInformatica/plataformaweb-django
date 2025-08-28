@@ -28,10 +28,10 @@ try:
     user.save()
     
     action = "creado" if created else "actualizado"
-    print(f"✅ Usuario admin {action} exitosamente")
+    print(f" Usuario admin {action} exitosamente")
     print("   Username: admin")
     print("   Password: admin123")
     print("   Email: admin@ejemplo.com")
     
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f" Error: {e}")

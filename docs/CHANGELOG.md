@@ -66,3 +66,16 @@ Se consolida commit técnico con trazabilidad completa (v1.2.2)
 Estado RF-07 y RF-08: validados en entorno reproducible
 Pendiente: integración de pytest como servicio en docker-compose.yml para automatización continua
 
+## [2025-08-27] Segmentación institucional dockerizada
+- Commit: `6d71443`
+- Redirección por perfil validada
+- Datos reales en dashboard de Apoderado
+- Imagen Docker reproducible
+- Evidencia técnica documentada
+
+## [2025-08-27] Imagen Docker reconstruida post-segmentación
+- Basada en commit `6d71443`
+- Incluye correcciones de redirección y datos reales
+- Validada en entorno dockerizado
+
+
