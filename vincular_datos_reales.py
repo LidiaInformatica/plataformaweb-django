@@ -27,9 +27,9 @@ def vincular_usuarios_con_apoderados_reales():
     print(" Usuarios:")
     usuarios = User.objects.all()
     for user in usuarios:
-        print(f"   🔑 {user.username} | {user.get_full_name()} | {user.email}")
+        print(f"   {user.username} | {user.get_full_name()} | {user.email}")
     
-    print("\n👤 Apoderados:")
+    print("\nApoderados:")
     apoderados = Apoderado.objects.all()
     for apoderado in apoderados:
         usuario_str = f"Usuario: {apoderado.usuario.username}" if apoderado.usuario else "SIN USUARIO"

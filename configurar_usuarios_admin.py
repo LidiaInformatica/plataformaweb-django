@@ -18,7 +18,7 @@ from core.models import PerfilUsuario
 def configurar_usuarios_admin():
     """Configura específicamente los usuarios visibles en el admin"""
     
-    print("🔧 Configurando usuarios del admin de Django...")
+    print("Configurando usuarios del admin de Django...")
     print("=" * 60)
     
     # Configuración específica de usuarios
@@ -116,7 +116,7 @@ def configurar_usuarios_admin():
             for grupo_nombre in config.get('grupos', []):
                 grupo = Group.objects.get(name=grupo_nombre)
                 usuario.groups.add(grupo)
-                print(f"   📋 Agregado al grupo: {grupo_nombre}")
+                print(f"   Agregado al grupo: {grupo_nombre}")
             
             print(f"    Usuario {username} configurado correctamente")
             
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     try:
         configurar_usuarios_admin()
         print("\n Configuración completada exitosamente!")
-        print("📝 Todos los usuarios deberían poder acceder a sus dashboards correspondientes.")
+        print("Todos los usuarios deberían poder acceder a sus dashboards correspondientes.")
     except Exception as e:
         print(f" Error durante la configuración: {e}")
         import traceback

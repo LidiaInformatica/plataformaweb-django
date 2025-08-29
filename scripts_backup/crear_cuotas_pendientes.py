@@ -23,14 +23,14 @@ def main():
         actividad1 = Actividad.objects.get(nombre="Matrícula 2026")
         actividad2 = Actividad.objects.get(nombre="Materiales Escolares Agosto")
         actividad3 = Actividad.objects.get(nombre="Excursión Pedagógica")
-        print("✓ Actividades encontradas")
+        print("Actividades encontradas")
     except Actividad.DoesNotExist as e:
         print(f" Error: No se encontró una actividad: {e}")
         return
     
     # Obtener todos los estudiantes
     estudiantes = Estudiante.objects.all()
-    print(f"✓ Total estudiantes: {estudiantes.count()}")
+    print(f"Total estudiantes: {estudiantes.count()}")
     
     if estudiantes.count() == 0:
         print(" No hay estudiantes en la base de datos")

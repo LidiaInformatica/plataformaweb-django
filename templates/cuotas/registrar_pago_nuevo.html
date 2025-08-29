@@ -139,7 +139,7 @@
 </div>
 
 <script>
-console.log('🚀 Iniciando JavaScript de registro de pagos');
+console.log('Iniciando JavaScript de registro de pagos');
 
 function actualizarSaldoPendiente() {
     var estudianteSelect = document.getElementById('select-estudiante');
@@ -147,7 +147,7 @@ function actualizarSaldoPendiente() {
     var saldoDiv = document.getElementById('saldo-pendiente');
     var montoInput = document.getElementById('id_monto');
     
-    console.log('🔍 Verificando selecciones...');
+    console.log('Verificando selecciones...');
     console.log('Estudiante:', estudianteSelect.value);
     console.log('Actividad:', actividadSelect.value);
     
@@ -156,7 +156,7 @@ function actualizarSaldoPendiente() {
         var selectedOption = estudianteSelect.options[estudianteSelect.selectedIndex];
         var saldo = selectedOption.getAttribute('data-saldo');
         
-        console.log('💰 Saldo encontrado:', saldo);
+        console.log('Saldo encontrado:', saldo);
         
         if (saldo && saldo > 0) {
             saldoDiv.innerHTML = '$' + Number(saldo).toLocaleString();
@@ -166,11 +166,11 @@ function actualizarSaldoPendiente() {
             if (!montoInput.value) {
                 montoInput.value = saldo;
             }
-            console.log('✅ Monto pendiente actualizado: $' + saldo);
+            console.log('Monto pendiente actualizado: $' + saldo);
         } else {
             saldoDiv.innerHTML = 'Sin deuda pendiente';
             saldoDiv.className = 'form-control bg-success text-white fw-bold';
-            console.log('✅ Sin deuda pendiente');
+            console.log('Sin deuda pendiente');
         }
     } else {
         saldoDiv.innerHTML = 'Seleccione estudiante y actividad';
@@ -181,15 +181,15 @@ function actualizarSaldoPendiente() {
 
 // Ejecutar cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 Configurando eventos');
+    console.log('Configurando eventos');
     
     document.getElementById('select-estudiante').addEventListener('change', function() {
-        console.log('🔄 Estudiante cambió a:', this.value);
+        console.log('Estudiante cambió a:', this.value);
         actualizarSaldoPendiente();
     });
     
     document.getElementById('select-actividad').addEventListener('change', function() {
-        console.log('🔄 Actividad cambió a:', this.value);
+        console.log('Actividad cambió a:', this.value);
         actualizarSaldoPendiente();
     });
     

@@ -16,7 +16,7 @@ from django.db.migrations.recorder import MigrationRecorder
 def apply_migration():
     """Aplicar la migración de cargo_directiva manualmente"""
     
-    print("🔧 Aplicando migración de cargo_directiva...")
+    print("Aplicando migración de cargo_directiva...")
     
     try:
         with connection.cursor() as cursor:

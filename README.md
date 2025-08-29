@@ -93,6 +93,9 @@ Diseñar y desarrollar una plataforma web modular que permita:
 docker build -t plataformaweb-django .
 docker run -p 8000:8000 plataformaweb-django
 
+docker compose up -d --build
+
+
 Acceso:
 
 Plataforma: http://localhost:8000/

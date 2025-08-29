@@ -21,7 +21,7 @@ def main():
         estudiante = Estudiante.objects.filter(rut="175403221").first()
         
         if estudiante:
-            print(f"✓ Encontrado estudiante: {estudiante.nombre} {estudiante.apellido_paterno}")
+            print(f"Encontrado estudiante: {estudiante.nombre} {estudiante.apellido_paterno}")
             print(f"  RUT actual: {estudiante.rut}")
             print(f"  Apoderado: {estudiante.apoderado.nombre}")
             
