@@ -398,76 +398,56 @@ def exportar_pagos(request):
 
 def estado_pago_apoderado(request):
     """RF-02: Visualizar el estado de pago por apoderado"""
+    from estudiantes.models import Apoderado, Estudiante
+    from .models import CuotaEstudiante
     
-    # Simular datos del apoderado actual
-    apoderado_actual = {
-        'nombre': 'Juan Pérez González',
-        'rut': '12.345.678-9',
-        'estudiantes': [
-            {
-                'nombre': 'María Pérez Soto',
-                'rut': '20.123.456-7',
-                'curso': '8° Básico A',
-                'cuotas': [
-                    {
-                        'actividad': 'Gira de Estudios 8° Básico',
-                        'monto_total': 25000,
-                        'monto_pagado': 25000,
-                        'saldo_pendiente': 0,
-                        'estado': 'Pagado',
-                        'fecha_vencimiento': '2024-03-10',
-                        'fecha_pago': '2024-03-08'
-                    },
-                    {
-                        'actividad': 'Ceremonia de Graduación',
-                        'monto_total': 35000,
-                        'monto_pagado': 0,
-                        'saldo_pendiente': 35000,
-                        'estado': 'Pendiente',
-                        'fecha_vencimiento': '2024-12-10',
-                        'fecha_pago': None
-                    }
-                ]
-            },
-            {
-                'nombre': 'Carlos Pérez Soto',
-                'rut': '20.234.567-8',
-                'curso': '6° Básico A',
-                'cuotas': [
-                    {
-                        'actividad': 'Material Escolar 2024',
-                        'monto_total': 8500,
-                        'monto_pagado': 8500,
-                        'saldo_pendiente': 0,
-                        'estado': 'Pagado',
-                        'fecha_vencimiento': '2024-01-30',
-                        'fecha_pago': '2024-01-25'
-                    },
-                    {
-                        'actividad': 'Seguro Escolar Anual',
-                        'monto_total': 12000,
-                        'monto_pagado': 6000,
-                        'saldo_pendiente': 6000,
-                        'estado': 'Parcial',
-                        'fecha_vencimiento': '2024-03-15',
-                        'fecha_pago': '2024-03-01'
-                    }
-                ]
-            }
-        ]
-    }
+    # Obtener el apoderado actual basado en el usuario autenticado
+    try:
+        apoderado = Apoderado.objects.get(usuario=request.user)
+    except Apoderado.DoesNotExist:
+        messages.error(request, 'No se encontró información de apoderado.')
+        return redirect('core:dashboard')
+
+    # Obtener todos los estudiantes del apoderado
+    estudiantes = Estudiante.objects.filter(apoderado=apoderado)
     
-    # Calcular totales
+    # Estructura para almacenar los datos
+    datos_estudiantes = []
     total_pendiente = 0
     total_pagado = 0
-    
-    for estudiante in apoderado_actual['estudiantes']:
-        for cuota in estudiante['cuotas']:
-            total_pendiente += cuota['saldo_pendiente']
-            total_pagado += cuota['monto_pagado']
-    
+
+    # Para cada estudiante, obtener sus cuotas
+    for estudiante in estudiantes:
+        cuotas = CuotaEstudiante.objects.filter(estudiante=estudiante)
+        cuotas_estudiante = []
+        
+        for cuota in cuotas:
+            cuota_data = {
+                'actividad': cuota.actividad.nombre,
+                'monto_total': cuota.monto_total,
+                'monto_pagado': cuota.monto_pagado,
+                'saldo_pendiente': cuota.saldo_pendiente(),
+                'estado': cuota.estado,
+                'fecha_vencimiento': cuota.fecha_vencimiento,
+                'fecha_pago': cuota.ultimo_pago.fecha_pago if cuota.ultimo_pago else None
+            }
+            cuotas_estudiante.append(cuota_data)
+            total_pendiente += cuota.saldo_pendiente()
+            total_pagado += cuota.monto_pagado
+
+        datos_estudiantes.append({
+            'nombre': f"{estudiante.nombre} {estudiante.apellido_paterno} {estudiante.apellido_materno}",
+            'rut': estudiante.rut,
+            'curso': estudiante.curso.nombre if estudiante.curso else '',
+            'cuotas': cuotas_estudiante
+        })
+
     context = {
-        'apoderado': apoderado_actual,
+        'apoderado': {
+            'nombre': f"{apoderado.nombre} {apoderado.apellido_paterno} {apoderado.apellido_materno}",
+            'rut': apoderado.rut,
+            'estudiantes': datos_estudiantes
+        },
         'total_pendiente': total_pendiente,
         'total_pagado': total_pagado,
         'total_general': total_pendiente + total_pagado
