@@ -102,3 +102,48 @@ Versión validada con login funcional para los tres perfiles institucionales:
 - Validaciones adicionales por cargo y vínculo institucional
 
 ## Esta versión marca el cierre funcional de la segmentación por perfil institucional para defensa de título.
+
+
+## Validación Funcional — Estado de Pruebas (2025-08-31)
+
+A continuación se resumen los resultados de las pruebas realizadas hasta la fecha sobre los requerimientos funcionales implementados:
+
+| RF    | Ciclo | Resultado Esperado                                 | Evidencia / Test                                 | Estado   |
+|-------|-------|----------------------------------------------------|--------------------------------------------------|----------|
+| RF-01 | 1     | Cuota registrada con actividad asociada            | test_registro_basico.py                          | PASSED   |
+| RF-01 | 2     | Monto correcto y persistencia en DB                | test_validacion_monto.py                         | PASSED   |
+| RF-01 | 3     | Registro sin errores y visualización en dashboard  | test_simulacion_completa.py                      | PASSED   |
+
+---
+
+**Nota:**  
+Solo se incluyen los requerimientos funcionales validados hasta la fecha. Las evidencias detalladas y logs se encuentran en la carpeta `docs/evidencias-RF01/`.
+
+
+| RF    | Ciclo | Resultado Esperado                      | Evidencia / Test                         | Estado   |
+|-------|-------|-----------------------------------------|------------------------------------------|----------|
+| RF-02 | 1     | Estado correcto según pagos registrados | test_ciclo1_calculo_estado_pago.py      | PASSED   |
+| RF-02 | 2     | Vista personalizada por perfil apoderado| test_ciclo2_segmentacion_apoderado.py   | FAILED   |
+
+
+
+
+
+
+
+
+
+
+
+
+| Código  | Descripción                                         | Avance (%) | Evidencia / Test                                    | Estado   |
+|---------|-----------------------------------------------------|------------|-----------------------------------------------------|----------|
+| RF-01   | Registrar cuotas escolares por actividad            | 100%       | test_registro_basico.py, test_validacion_monto.py, test_simulacion_completa.py, docs/evidencias-RF01/ | PASSED   |
+| RF-02   | Visualizar estado de pago por alumno                |            |                                                     |          |
+| RF-03   | Acceder con sesión segmentada                       |            |                                                     |          |
+| RF-04   | Filtrar actividad por nombre/RUT/curso              |            |                                                     |          |
+| RF-05   | Exportar información PDF/Excel                      |            |                                                     |          |
+| RF-06   | Notificaciones automáticas                          |            |                                                     |          |
+| RF-07   | Validar campos obligatorios                         |            |                                                     |          |
+| RF-08   | Visualizar mensajes y alertas                       |            |                                                     |          |
+| RF-09   | Crear alumno y apoderado desde la plataforma        |            |                                                     |          |
