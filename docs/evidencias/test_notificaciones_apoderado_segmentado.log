@@ -1,0 +1,12 @@
+root@36ca022787d5:/app# pytest tests/test_notificaciones_apoderado_segmentado.py -v
+============================================================= test session starts =============================================================platform linux -- Python 3.12.11, pytest-8.4.1, pluggy-1.6.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+django: version: 4.2.7, settings: plataformaweb.settings (from ini)
+rootdir: /app
+configfile: pytest.ini
+plugins: django-4.11.1
+collected 1 item
+
+tests/test_notificaciones_apoderado_segmentado.py::test_notificaciones_apoderado_segmentado PASSED                                      [100%] 
+
+============================================================== 1 passed in 2.75s ==============================================================root@36ca022787d5:/app#

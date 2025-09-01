@@ -1,0 +1,11 @@
+root@36ca022787d5:/app# pytest tests/test_redireccion_apoderado.py
+==================================================== test session starts =====================================================platform linux -- Python 3.12.11, pytest-8.4.1, pluggy-1.6.0
+django: version: 4.2.7, settings: plataformaweb.settings (from ini)
+rootdir: /app
+configfile: pytest.ini
+plugins: django-4.11.1
+collected 1 item
+
+tests/test_redireccion_apoderado.py .                                                                                  [100%] 
+
+===================================================== 1 passed in 2.83s ======================================================root@36ca022787d5:/app#
