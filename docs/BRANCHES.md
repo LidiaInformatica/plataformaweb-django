@@ -24,3 +24,11 @@
 ### Tests Implementados
 - RF-01: `test_registro_cuotas_por_actividad.py`
 - RF-02: `test_ciclo1_calculo_estado_pago.py`, `test_ciclo2_segmentacion_apoderado.py`
+
+Branch: testing/waterfall-rf-validation
+Commits: 3 nuevos commits
+Archivos principales modificados:
+- core/management/commands/configurar_usuarios.py (nuevo)
+- core/management/commands/reorganizar_perfiles.py (nuevo)
+- docker-compose.yml (actualizado)
+- .gitignore (actualizado)
