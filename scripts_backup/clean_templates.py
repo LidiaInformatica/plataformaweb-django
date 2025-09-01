@@ -29,7 +29,7 @@ def analyze_templates():
                         renders = re.findall(r'render\([^,]+,\s*[\'"]([^\'\"]+)[\'"]', content)
                         view_references.update(renders)
                         if renders:
-                            print(f"\n📋 REFERENCIAS EN {filepath}:")
+                            print(f"\nREFERENCIAS EN {filepath}:")
                             for ref in renders:
                                 print(f"  - {ref}")
                 except Exception as e:
@@ -48,7 +48,7 @@ def analyze_templates():
                         templates = re.findall(r'[\'"]([^\'\"]+\.html)[\'"]', content)
                         url_references.update(templates)
                         if templates:
-                            print(f"\n🔗 REFERENCIAS EN {filepath}:")
+                            print(f"\nREFERENCIAS EN {filepath}:")
                             for ref in templates:
                                 print(f"  - {ref}")
                 except Exception as e:

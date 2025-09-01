@@ -30,7 +30,7 @@ def main():
     
     # Obtener todos los estudiantes
     estudiantes = Estudiante.objects.all()
-    print(f"✓ Total estudiantes: {estudiantes.count()}")
+    print(f"Total estudiantes: {estudiantes.count()}")
     
     if estudiantes.count() == 0:
         print(" No hay estudiantes en la base de datos")

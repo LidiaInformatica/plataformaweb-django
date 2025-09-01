@@ -61,7 +61,7 @@ def crear_usuarios_prueba():
     for datos_usuario in usuarios_prueba:
         # Verificar si el usuario ya existe
         if User.objects.filter(username=datos_usuario['username']).exists():
-            print(f"❌ Usuario {datos_usuario['username']} ya existe")
+            print(f"Usuario {datos_usuario['username']} ya existe")
             continue
         
         try:
@@ -82,12 +82,12 @@ def crear_usuarios_prueba():
                 telefono=datos_usuario['telefono']
             )
             
-            print(f"✅ Usuario creado: {usuario.get_full_name()} ({perfil.get_tipo_perfil_display()})")
+            print(f"Usuario creado: {usuario.get_full_name()} ({perfil.get_tipo_perfil_display()})")
             
         except Exception as e:
-            print(f"❌ Error creando usuario {datos_usuario['username']}: {e}")
+            print(f"Error creando usuario {datos_usuario['username']}: {e}")
     
-    print("\n📋 Usuarios de prueba creados:")
+    print("\nUsuarios de prueba creados:")
     print("=" * 50)
     print("RUT: 12345678k | Contraseña: password123 | Tipo: Apoderado")
     print("RUT: 98765432j | Contraseña: password123 | Tipo: Directiva")

@@ -83,23 +83,30 @@ Diseñar y desarrollar una plataforma web modular que permita:
 
 ## Dockerización del entorno
 
-**Requisitos:**
-- Docker instalado en Windows  
-- Proyecto ubicado en `C:\plataformaweb-django`  
+Requisitos previos
+•	Docker y Docker Compose instalados (en Windows, Docker Desktop ya los incluye)
+•	Proyecto clonado en: C:\plataformaweb-django
 
-**Comandos:**
+## Levantar el sistema
 
-```powershell
-docker build -t plataformaweb-django .
-docker run -p 8000:8000 plataformaweb-django
+Desde la raíz del proyecto
 
-Acceso:
+docker compose up -d --build
 
-Plataforma: http://localhost:8000/
-Usuario Admin: Lidia / Contraseña: admin123
-Usuario Apoderado: apoderado3 / Contraseña: Lidi0354
+•	Construye la imagen plataformaweb-django-web
+•	Levanta el contenedor plataformaweb en segundo plano
+•	Expone el sistema en http://localhost:8000
+ 
+Acceso a la plataforma
+
+Plataforma: http://localhost:8000
+•	Usuario Admin: Lidia / Contraseña: admin123
+•	Usuario Apoderado: apoderado3 / Contraseña: Lidi0354
 Panel Admin: http://localhost:8000/admin
 
+Entrar al contenedor en modo interactivo
+docker exec -it plataformaweb bash
+•	Acceso al shell del contenedor
 
 
 Base de datos funcional incluida

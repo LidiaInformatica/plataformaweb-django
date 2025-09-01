@@ -49,7 +49,7 @@ def crear_tipos_actividad():
             defaults={'descripcion': tipo_data['descripcion']}
         )
         if created:
-            print(f"✓ Creado: {tipo.nombre}")
+            print(f"Creado: {tipo.nombre}")
         else:
             print(f"- Ya existe: {tipo.nombre}")
 
@@ -87,7 +87,7 @@ def crear_cursos():
             }
         )
         if created:
-            print(f"✓ Creado: {curso.nombre}")
+            print(f"Creado: {curso.nombre}")
         else:
             print(f"- Ya existe: {curso.nombre}")
 
