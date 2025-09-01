@@ -1,0 +1,11 @@
+PS C:\plataformaweb-django> docker compose exec web pytest tests/rf02/test_ciclo2_segmentacion_apoderado.py   n_apoderado.py                                                                               rm linux -- Pytho
+================================= test session starts =================================platform linux -- Python 3.12.11, pytest-8.4.1, pluggy-1.6.0
+django: version: 4.2.7, settings: plataformaweb.settings (from env)
+rootdir: /app
+configfile: pytest.ini
+plugins: cov-6.2.1, django-4.11.1
+collected 1 item
+
+tests/rf02/test_ciclo2_segmentacion_apoderado.py .                              [100%]       
+                                                                                             plataformaweb-dja
+================================== 1 passed in 2.28s ==================================
