@@ -10,6 +10,7 @@ services:
       - DJANGO_SETTINGS_MODULE=plataformaweb.settings
     depends_on:
       - db
+    container_name: plataformaweb-django  # Agregado el nombre del contenedor
 
   db:
     image: postgres:13
