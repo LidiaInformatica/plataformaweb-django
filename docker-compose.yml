@@ -1,54 +1,24 @@
-version: '3.8'
-
 services:
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-      - ./tests:/app/tests
-      - ./docs:/app/docs
     ports:
       - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=plataformaweb.settings
-      - PYTHONPATH=/app
-      - DJANGO_DEBUG=1
     depends_on:
       - db
-    networks:
-      - plataforma-network
 
   db:
     image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=plataformaweb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    networks:
-      - plataforma-network
-
-  pytest:
-    build: .
-    command: pytest
     volumes:
-      - .:/app
-      - ./tests:/app/tests
-      - ./docs:/app/docs
-    environment:
-      - DJANGO_SETTINGS_MODULE=plataformaweb.settings
-      - PYTHONPATH=/app
-      - DJANGO_DEBUG=1
-    depends_on:
-      - db
-    networks:
-      - plataforma-network
-
-networks:
-  plataforma-network:
-    driver: bridge
+      - postgres_data:/var/lib/postgresql/data/
 
 volumes:
   postgres_data:
