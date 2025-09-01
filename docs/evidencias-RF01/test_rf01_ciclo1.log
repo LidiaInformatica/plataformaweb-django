@@ -1,0 +1,15 @@
+C:\plataformaweb-django> docker compose exec web pytest tests/rf01/test_registro_cuotas_por_actividad.py -v
+time="2025-08-31T20:55:39-04:00" level=warning msg="C:\\plataformaweb-django\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+=============== test session starts ===============platform linux -- Python 3.12.11, pytest-8.4.1, pluggy-1.6.0 -- /usr/local/bin/python3.12
+cachedir: .pytest_cache
+django: version: 4.2.7, settings: plataformaweb.settings (from ini)
+rootdir: /app
+configfile: pytest.ini
+plugins: django-4.11.1
+collected 3 items
+
+tests/rf01/test_registro_cuotas_por_actividad.py::TestRegistroCuotas::test_registro_basico PASSED [ 33%]       
+tests/rf01/test_registro_cuotas_por_actividad.py::TestRegistroCuotas::test_validacion_monto PASSED [ 66%]      
+tests/rf01/test_registro_cuotas_por_actividad.py::TestRegistroCuotas::test_simulacion_completa PASSED [100%]   
+
+================ 3 passed in 1.33s ================PS C:\plataformaweb-django>
