@@ -1,14 +1,14 @@
+version: '3.8'
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: plataformaweb
+    image: plataformaweb-django
+    container_name: plataformaweb-django
     ports:
       - "8000:8000"
     volumes:
       - .:/app
       - ./db.sqlite3:/app/db.sqlite3
-
     command: python manage.py runserver 0.0.0.0:8000
-
