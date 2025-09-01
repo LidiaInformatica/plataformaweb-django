@@ -1,16 +1,20 @@
 from django.urls import path
 from . import views
-from core.views import dashboard_apoderado
 
 app_name = 'core'
 
 urlpatterns = [
+    # Dashboard principal y redirección
     path('', views.dashboard, name='dashboard'),
-    path('perfil/', views.perfil_usuario, name='perfil'),
-    path('mensajes/', views.bandeja_mensajes, name='bandeja_mensajes'),
-    path('dashboard-directiva/', views.dashboard_directiva, name='dashboard_directiva'),
     path('redireccion/', views.redireccion_post_login, name='redireccion_post_login'),
+    
+    # Dashboards específicos
     path('dashboard/apoderado/', views.dashboard_apoderado, name='dashboard_apoderado'),
-    path('error/apoderado/', views.error_apoderado, name='error_apoderado')
-
+    path('dashboard/directiva/', views.dashboard_directiva, name='dashboard_directiva'),
+    
+    # Mensajes y notificaciones
+    path('mensajes/', views.bandeja_mensajes, name='bandeja_mensajes'),
+    
+    # Errores
+    path('error/apoderado/', views.error_apoderado, name='error_apoderado'),
 ]

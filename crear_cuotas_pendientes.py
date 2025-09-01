@@ -20,9 +20,10 @@ def main():
     
     # Obtener las actividades que creamos
     try:
-        actividad1 = Actividad.objects.get(nombre="Matrícula 2026")
-        actividad2 = Actividad.objects.get(nombre="Materiales Escolares Agosto")
-        actividad3 = Actividad.objects.get(nombre="Excursión Pedagógica")
+        actividad1 = Actividad.objects.get(nombre="Poleron 4° Medio")
+        actividad2 = Actividad.objects.get(nombre="Día del Profesor")
+        actividad3 = Actividad.objects.get(nombre="Gala 4° Medio")
+
         print(" Actividades encontradas")
     except Actividad.DoesNotExist as e:
         print(f" Error: No se encontró una actividad: {e}")

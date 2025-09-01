@@ -12,15 +12,25 @@ import logging
 logger = logging.getLogger(__name__)
 
 def lista_pagos(request):
-    # Mostrar cuotas y pagos reales desde la base de datos
+    from estudiantes.models import Apoderado, Estudiante, Curso
     from .models import CuotaEstudiante, PagoCuota
-    cuotas = CuotaEstudiante.objects.select_related('estudiante', 'actividad', 'estudiante__curso').all()
 
-    # Filtros (RF-04: Filtrar cuotas por nombre, RUT, actividad)
+    if request.user.is_staff or request.user.is_superuser:
+        cuotas = CuotaEstudiante.objects.select_related('estudiante', 'actividad', 'estudiante__curso').all()
+    else:
+        try:
+            apoderado = Apoderado.objects.get(usuario=request.user)
+            hijos = Estudiante.objects.filter(apoderado=apoderado)
+            cuotas = CuotaEstudiante.objects.select_related('estudiante', 'actividad', 'estudiante__curso').filter(estudiante__in=hijos)
+        except Apoderado.DoesNotExist:
+            cuotas = CuotaEstudiante.objects.none()
+
+    # Filtros (RF-04: Filtrar cuotas por nombre, RUT, actividad, curso, estado)
     estudiante_filtro = request.GET.get('estudiante', '')
     rut_filtro = request.GET.get('rut', '')
     actividad_filtro = request.GET.get('actividad', '')
     estado_filtro = request.GET.get('estado', '')
+    curso_filtro = request.GET.get('curso', '')
 
     if estudiante_filtro:
         cuotas = cuotas.filter(estudiante__nombre__icontains=estudiante_filtro)
@@ -30,6 +40,8 @@ def lista_pagos(request):
         cuotas = cuotas.filter(actividad__nombre__icontains=actividad_filtro)
     if estado_filtro:
         cuotas = cuotas.filter(estado__icontains=estado_filtro)
+    if curso_filtro:
+        cuotas = cuotas.filter(estudiante__curso__id=curso_filtro)
 
     pagos = []
     for cuota in cuotas:
@@ -49,6 +61,8 @@ def lista_pagos(request):
             'metodo_pago': ultimo_pago.metodo_pago.capitalize() if ultimo_pago else None
         })
 
+    cursos = Curso.objects.all()
+
     context = {
         'pagos': pagos,
         'filtros': {
@@ -56,7 +70,9 @@ def lista_pagos(request):
             'rut': rut_filtro,
             'actividad': actividad_filtro,
             'estado': estado_filtro,
-        }
+            'curso': curso_filtro,
+        },
+        'cursos': cursos,
     }
 
     return render(request, 'cuotas/lista_pagos.html', context)

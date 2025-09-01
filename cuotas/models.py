@@ -6,8 +6,6 @@ class CuotaEstudiante(models.Model):
     ESTADO_CHOICES = [
         ('pendiente', 'Pendiente'),
         ('pagado', 'Pagado'),
-        ('vencido', 'Vencido'),
-        ('exento', 'Exento'),
     ]
     
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
@@ -28,8 +26,6 @@ class PagoCuota(models.Model):
     METODO_PAGO_CHOICES = [
         ('efectivo', 'Efectivo'),
         ('transferencia', 'Transferencia'),
-        ('cheque', 'Cheque'),
-        ('tarjeta', 'Tarjeta'),
     ]
     
     cuota = models.ForeignKey(CuotaEstudiante, on_delete=models.CASCADE)
