@@ -1,0 +1,234 @@
+PS C:\plataformaweb-django> docker compose exec web pyten_apoderado.py -v
+time="2025-08-31T23:50:52-04:00" level=warning msg="C:\\yml: the attribute `version` is obsolete, it will be igntial confusion"
+==================================== test session startsplatform linux -- Python 3.12.11, pytest-8.4.1, pluggy-1
+cachedir: .pytest_cache
+django: version: 4.2.7, settings: plataformaweb.settings
+rootdir: /app
+configfile: pytest.ini
+plugins: django-4.11.1
+collected 1 item
+
+tests/rf02/test_ciclo2_segmentacion_apoderado.py::test_s%]
+
+========================================= FAILURES =====______________________________ test_segmentacion_por_apo
+self = <django.db.models.fields.AutoField: id>
+value = <SimpleLazyObject: <django.contrib.auth.models.A>>
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        try:
+>           return int(value)
+                   ^^^^^^^^^^
+E           TypeError: int() argument must be a string,  not 'SimpleLazyObject'
+
+/usr/local/lib/python3.12/site-packages/django/db/models
+
+The above exception was the direct cause of the followin
+
+client = <django.test.client.Client object at 0x74ba4949
+
+    @pytest.mark.django_db
+    def test_segmentacion_por_apoderado(client):
+        """
+        RF-02 Ciclo 2: Segmentación por Apoderado
+        Verifica que un apoderado solo pueda ver el esta
+
+        Estado: En prueba con credenciales reales
+        Credenciales: apoderado1/Lidi0354
+        """
+        # Usar credenciales reales en lugar de crear nue
+        client.login(username="apoderado1", password="Li
+
+        # Obtener página de estado
+        url = reverse('cuotas:estado_apoderado')
+>       response = client.get(url)
+                   ^^^^^^^^^^^^^^^
+
+tests/rf02/test_ciclo2_segmentacion_apoderado.py:23:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ /usr/local/lib/python3.12/site-packages/django/test/clie
+    response = super().get(path, data=data, secure=secur
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/test/clie
+    return self.generic(
+/usr/local/lib/python3.12/site-packages/django/test/clie
+    return self.request(**r)
+           ^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/test/clie
+    self.check_exception(response)
+/usr/local/lib/python3.12/site-packages/django/test/clie
+    raise exc_value
+/usr/local/lib/python3.12/site-packages/django/core/hand
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/core/hand
+    response = wrapped_callback(request, *callback_args,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cuotas/views.py:406: in estado_pago_apoderado
+    apoderado = Apoderado.objects.get(usuario=request.us
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/models
+    return getattr(self.get_queryset(), name)(*args, **k
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/models
+    clone = self._chain() if self.query.combinator else 
+                                                        
+/usr/local/lib/python3.12/site-packages/django/db/models
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/models    clone._filter_or_exclude_inplace(negate, args, kwarg
+/usr/local/lib/python3.12/site-packages/django/db/models_inplace
+    self._query.add_q(Q(*args, **kwargs))
+/usr/local/lib/python3.12/site-packages/django/db/models
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/models
+    child_clause, needed_inner = self.build_filter(
+/usr/local/lib/python3.12/site-packages/django/db/models
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/models
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/models
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.12/site-packages/django/db/modelst_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+self = <django.db.models.fields.AutoField: id>
+value = <SimpleLazyObject: <django.contrib.auth.models.A>>
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        try:
+            return int(value)
+        except (TypeError, ValueError) as e:
+>           raise e.__class__(
+                "Field '%s' expected a number but got %r
+            ) from e
+E           TypeError: Field 'id' expected a number but b.auth.models.AnonymousUser object at 0x74ba492fbbc0>>.
+
+/usr/local/lib/python3.12/site-packages/django/db/models
+----------------------------------- Captured stderr setuCreating test database for alias 'default'...
+----------------------------------- Captured stderr call🐛 [2025-08-31 23:50:55,357] ERROR django.request - log_ /cuotas/estado-apoderado/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/d53, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-likeLazyObject'
+
+The above exception was the direct cause of the followin
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/c
+in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/cget_response
+    response = wrapped_callback(request, *callback_args,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/cuotas/views.py", line 406, in estado_pago_
+    apoderado = Apoderado.objects.get(usuario=request.us
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/dager_method
+    return getattr(self.get_queryset(), name)(*args, **k
+  File "/usr/local/lib/python3.12/site-packages/django/d
+    clone = self._chain() if self.query.combinator else 
+                                                        
+  File "/usr/local/lib/python3.12/site-packages/django/dter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwarg
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.12/site-packages/django/d add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d    clone = self._chain() if self.query.combinator else 
+                                                        
+  File "/usr/local/lib/python3.12/site-packages/django/dter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwarg
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.12/site-packages/django/d add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/dter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwarg
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.12/site-packages/django/d add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwarg
+  File "/usr/local/lib/python3.12/site-packages/django/dlter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.12/site-packages/django/d add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/d  File "/usr/local/lib/python3.12/site-packages/django/dnit__
+    self.rhs = self.get_prep_lookup()
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+               ^^^^^^^^^^^^^^^^^^^^^^
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x74ba492fbbc0>>.
+--------------------------------- Captured stderr teardown ----------------------------------Destroying test database for alias 'default'...
+================================== short test summary info ==================================FAILED tests/rf02/test_ciclo2_segmentacion_apoderado.py::test_segmentacion_por_apoderado - TypeError: Field 'id' expected a number but got <SimpleLazyObject: <django.contrib.auth....
+===================================== 1 failed in 2.66s =====================================PS C:\plataformaweb-django>
